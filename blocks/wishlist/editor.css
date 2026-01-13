@@ -1,0 +1,101 @@
+/**
+ * Block Editor Styles for Personal Wishlist Block
+ *
+ * @package Personal_Wishlist_Manager
+ */
+
+/* Block wrapper in editor */
+.wp-block-personal-wishlist-manager-wishlist {
+	margin: 20px 0;
+}
+
+/* Block placeholder state */
+.pwm-block-placeholder {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Block error state */
+.pwm-block-error {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Block loading state */
+.pwm-block-loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+/* Loading spinner */
+.pwm-block-loading .components-spinner {
+	margin: 0 auto;
+}
+
+/* Category checkboxes in sidebar */
+.block-editor-block-inspector .components-panel__body .components-base-control {
+	margin-bottom: 12px;
+}
+
+.block-editor-block-inspector .components-panel__body .components-checkbox-control__label {
+	display: flex;
+	align-items: center;
+}
+
+/* Help text styling */
+.block-editor-block-inspector .components-base-control__help {
+	margin-top: 8px;
+	font-size: 12px;
+	font-style: italic;
+	color: #757575;
+}
+
+/* Range control styling */
+.block-editor-block-inspector .components-range-control {
+	margin-bottom: 20px;
+}
+
+/* Select control styling */
+.block-editor-block-inspector .components-select-control {
+	margin-bottom: 20px;
+}
+
+/* Toggle control styling */
+.block-editor-block-inspector .components-toggle-control {
+	margin-bottom: 20px;
+}
+
+/* Ensure preview renders correctly in editor */
+.wp-block-personal-wishlist-manager-wishlist .personal-wishlist-container {
+	background: #fff;
+	padding: 20px;
+	border-radius: 4px;
+}
+
+/* Preview grid in editor */
+.wp-block-personal-wishlist-manager-wishlist .personal-wishlist-grid {
+	margin-top: 0;
+}
+
+/* Editor-specific adjustments for filters */
+.wp-block-personal-wishlist-manager-wishlist .wishlist-filters {
+	margin-bottom: 20px;
+}
+
+/* Make sure cards look good in editor */
+.wp-block-personal-wishlist-manager-wishlist .wishlist-card {
+	cursor: default;
+	pointer-events: none;
+}
+
+/* Responsive adjustments in editor */
+@media (max-width: 782px) {
+	.wp-block-personal-wishlist-manager-wishlist {
+		margin: 10px 0;
+	}
+}

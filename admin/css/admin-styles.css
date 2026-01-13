@@ -1,0 +1,321 @@
+/**
+ * Admin styles for Personal Wishlist Manager
+ *
+ * @package Personal_Wishlist_Manager
+ */
+
+/* Form fields */
+.pwm-form-field {
+	margin-bottom: 20px;
+}
+
+.pwm-form-field label {
+	display: block;
+	margin-bottom: 5px;
+	font-weight: 600;
+}
+
+.pwm-form-field .required {
+	color: #d63638;
+}
+
+.pwm-form-field .description {
+	margin-top: 5px;
+	color: #646970;
+	font-style: italic;
+}
+
+/* Image field */
+.pwm-image-field {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.pwm-image-field input[type="text"] {
+	flex: 1;
+	min-width: 300px;
+}
+
+.pwm-upload-image {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.pwm-remove-image {
+	color: #d63638;
+	text-decoration: none;
+	padding: 0 8px;
+	line-height: 28px;
+}
+
+.pwm-remove-image:hover {
+	color: #a00;
+}
+
+#pwm-image-preview {
+	position: relative;
+}
+
+#pwm-image-preview img {
+	display: block;
+	border: 1px solid #ddd;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	transition: transform 0.2s ease;
+}
+
+#pwm-image-preview img:hover {
+	transform: scale(1.02);
+}
+
+/* New category field */
+#new-category-field {
+	margin-top: 10px;
+}
+
+/* Category and tag badges in list table */
+.pwm-category-badge {
+	display: inline-block;
+	background: #2271b1;
+	color: white;
+	padding: 4px 12px;
+	border-radius: 4px;
+	font-size: 12px;
+	font-weight: 500;
+}
+
+.pwm-tag-badge {
+	display: inline-block;
+	border: 1px solid #2271b1;
+	color: #2271b1;
+	padding: 2px 8px;
+	border-radius: 3px;
+	font-size: 11px;
+	margin-right: 4px;
+	margin-bottom: 4px;
+}
+
+/* List table image column */
+.column-image {
+	width: 60px;
+}
+
+.column-tags {
+	max-width: 200px;
+}
+
+/* Settings page styles */
+.pwm-shortcode-docs {
+	background: #fff;
+	padding: 20px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	margin-top: 20px;
+}
+
+.pwm-shortcode-docs h2 {
+	margin-top: 0;
+}
+
+.pwm-shortcode-docs h3 {
+	margin-top: 30px;
+	padding-top: 20px;
+	border-top: 1px solid #ddd;
+}
+
+.pwm-shortcode-docs pre {
+	background: #f6f7f7;
+	padding: 15px;
+	border-radius: 4px;
+	overflow-x: auto;
+}
+
+.pwm-shortcode-docs code {
+	font-family: 'Monaco', 'Courier New', monospace;
+	font-size: 13px;
+}
+
+.pwm-example-shortcode {
+	background: #f9f9f9;
+	padding: 15px;
+	margin: 15px 0;
+	border-left: 4px solid #2271b1;
+	border-radius: 0 4px 4px 0;
+}
+
+.pwm-example-shortcode h4 {
+	margin-top: 0;
+	margin-bottom: 10px;
+	color: #1d2327;
+}
+
+/* Tags page */
+.pwm-tag-cloud {
+	background: #fff;
+	padding: 20px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	line-height: 2;
+}
+
+.pwm-tag-cloud a {
+	text-decoration: none;
+	transition: all 0.2s ease;
+}
+
+.pwm-tag-cloud a:hover {
+	color: #2271b1;
+	text-decoration: underline;
+}
+
+.tag-link-count {
+	font-size: 0.85em;
+	color: #646970;
+}
+
+.pwm-tags-view-toggle {
+	margin: 20px 0;
+}
+
+/* Form table improvements */
+.form-table th {
+	padding: 20px 10px 20px 0;
+	vertical-align: top;
+}
+
+.form-table td {
+	padding: 15px 10px;
+	vertical-align: top;
+}
+
+.form-table input[type="text"],
+.form-table input[type="number"],
+.form-table select,
+.form-table textarea {
+	width: 100%;
+	max-width: 500px;
+}
+
+.form-table fieldset label {
+	display: block;
+	margin-bottom: 8px;
+}
+
+.form-table fieldset label input[type="radio"],
+.form-table fieldset label input[type="checkbox"] {
+	margin-right: 8px;
+}
+
+/* Delete confirmation styling */
+.pwm-delete-item {
+	color: #d63638 !important;
+}
+
+.pwm-delete-item:hover {
+	color: #a00 !important;
+}
+
+/* Metabox styling for item form */
+#post-body-content {
+	margin-right: 300px;
+}
+
+#postbox-container-1 {
+	float: right;
+	margin-right: -300px;
+	width: 280px;
+}
+
+.postbox {
+	margin-bottom: 20px;
+}
+
+.postbox .hndle {
+	cursor: default;
+}
+
+.postbox .inside {
+	padding: 12px;
+}
+
+#major-publishing-actions {
+	background: #f6f7f7;
+	border-top: 1px solid #ddd;
+	padding: 10px;
+	margin: 0 -12px -12px;
+}
+
+#publishing-action {
+	text-align: right;
+	float: right;
+}
+
+#delete-action {
+	float: left;
+	line-height: 32px;
+}
+
+#major-publishing-actions .clear {
+	clear: both;
+}
+
+/* Responsive */
+@media (max-width: 782px) {
+	#post-body-content {
+		margin-right: 0;
+	}
+
+	#postbox-container-1 {
+		float: none;
+		margin-right: 0;
+		width: 100%;
+	}
+
+	.pwm-image-field {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.pwm-image-field input[type="text"] {
+		margin-bottom: 10px;
+	}
+}
+
+/* Notice improvements */
+.notice.pwm-notice {
+	border-left-width: 4px;
+	padding: 12px;
+	margin: 15px 0;
+}
+
+.notice.pwm-notice p {
+	margin: 0.5em 0;
+}
+
+/* Loading state */
+.pwm-loading {
+	opacity: 0.6;
+	pointer-events: none;
+	position: relative;
+}
+
+.pwm-loading::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 24px;
+	height: 24px;
+	margin: -12px 0 0 -12px;
+	border: 3px solid #f3f3f3;
+	border-top: 3px solid #2271b1;
+	border-radius: 50%;
+	animation: pwm-spin 1s linear infinite;
+}
+
+@keyframes pwm-spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
