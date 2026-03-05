@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="Wishlist placeholder">
+  <rect width="1200" height="900" fill="#f3f4f6"/>
+  <rect x="220" y="180" width="760" height="540" rx="24" fill="#ffffff" stroke="#d1d5db" stroke-width="6"/>
+  <circle cx="430" cy="360" r="72" fill="#dbeafe"/>
+  <path d="M350 620l150-170 120 110 90-100 140 160H350z" fill="#cbd5e1"/>
+  <text x="600" y="760" text-anchor="middle" font-family="Arial, sans-serif" font-size="52" fill="#475569">Quick Add Item</text>
+</svg>

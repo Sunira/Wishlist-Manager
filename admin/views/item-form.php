@@ -26,7 +26,6 @@ $categories = pwm_get_categories();
 // Set default values
 $title = $item ? $item->title : '';
 $category = $item ? $item->category : '';
-$tags = $item ? $item->tags : '';
 $image_url = $item ? $item->image_url : '';
 $product_url = $item ? $item->product_url : '';
 $price = $item ? $item->price : '';
@@ -102,19 +101,6 @@ $reason = $item ? $item->reason : '';
 						</div>
 					</div>
 
-					<div class="pwm-form-row">
-						<label for="tags" class="pwm-label">
-							<?php _e('Tags', 'personal-wishlist-manager'); ?>
-							<span class="pwm-label-hint"><?php _e('(Optional)', 'personal-wishlist-manager'); ?></span>
-						</label>
-						<input type="text"
-							   id="tags"
-							   name="tags"
-							   value="<?php echo esc_attr($tags); ?>"
-							   class="pwm-input pwm-input-large"
-							   placeholder="<?php _e('e.g., electronics, gift idea, high priority', 'personal-wishlist-manager'); ?>">
-						<p class="pwm-field-description"><?php _e('Separate multiple tags with commas', 'personal-wishlist-manager'); ?></p>
-					</div>
 				</div>
 
 				<div class="pwm-form-card">
@@ -235,7 +221,6 @@ $reason = $item ? $item->reason : '';
 						<h3><?php _e('Quick Tips', 'personal-wishlist-manager'); ?></h3>
 						<ul>
 							<li><?php _e('Use descriptive titles for easy searching', 'personal-wishlist-manager'); ?></li>
-							<li><?php _e('Add tags to organize items by theme', 'personal-wishlist-manager'); ?></li>
 							<li><?php _e('Include product link for quick access', 'personal-wishlist-manager'); ?></li>
 						</ul>
 					</div>

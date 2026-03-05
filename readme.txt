@@ -1,34 +1,33 @@
 === Personal Wishlist Manager ===
-Contributors: yourusername
+Contributors: sunira
 Tags: wishlist, products, shopping, catalog, gift list
 Requires at least: 6.0
 Tested up to: 6.4
-Stable tag: 1.0.0
+Stable tag: 1.0.5
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-A comprehensive personal wishlist manager with admin dashboard and beautiful frontend display.
+A personal wishlist manager with an admin dashboard, Gutenberg block support, shortcode support, and a responsive frontend display.
 
 == Description ==
 
-Personal Wishlist Manager is a powerful WordPress plugin that allows you to create and manage a personal wishlist with a user-friendly admin interface and stunning frontend display.
+Personal Wishlist Manager lets you create and manage wishlist items from the WordPress admin area and display them on the frontend with either a shortcode or a Gutenberg block.
 
 = Features =
 
-* **Easy-to-use Admin Dashboard** - Manage your wishlist items with a familiar WordPress interface
-* **Beautiful Frontend Display** - Showcase your wishlist with responsive grid layouts
-* **Advanced Filtering** - Filter items by category, tags, price range, and search
-* **Customizable Display** - Choose from 1-4 column layouts
-* **Category & Tag Management** - Organize items with categories and tags
-* **Rich Item Details** - Include title, image, price, category, tags, and notes
-* **AJAX Filtering** - Filter items without page reload (optional)
-* **Responsive Design** - Looks great on all devices
-* **Flexible Shortcode** - Display wishlist anywhere with customizable parameters
-* **Import/Export** - Export to CSV or JSON format
-* **Custom Styling** - Add your own CSS for complete control
-* **SEO Friendly** - Clean, semantic HTML markup
-* **Translation Ready** - Fully internationalized and ready for translation
+* **Admin Dashboard** - Manage wishlist items with list, add, edit, view, delete, and bulk delete screens
+* **Responsive Frontend Display** - Show items in a card grid with 1-4 columns
+* **Advanced Filtering** - Filter items by search term, category, tags, price range, and sort order
+* **Shortcode and Block Support** - Display the wishlist with a shortcode or Gutenberg block
+* **Rich Item Details** - Store title, image, product link, price, category, tags, and notes
+* **Tag Views and Category Overview** - Browse derived categories and tags in the admin
+* **AJAX Filtering** - Update frontend results without a full page reload
+* **Shortcode Generator** - Build customized shortcode output from the settings screen
+* **Export Tools** - Export wishlist data to CSV or JSON
+* **Custom Styling** - Add custom CSS from the plugin settings
+* **Selective Asset Loading** - Frontend assets load only when the shortcode or block is present
+* **Translation Ready** - Uses WordPress internationalization functions throughout
 
 = Shortcode Usage =
 
@@ -47,10 +46,16 @@ Display your wishlist on any page or post using the `[personal_wishlist]` shortc
 
 * `columns` - Number of columns (1-4, default: 3)
 * `category` - Filter to specific category
-* `show_filters` - Show/hide filter panel (true/false, default: true)
+* `categories` - Filter to multiple categories
 * `sort` - Sort order (alphabetical, price_asc, price_desc, date_desc, default: alphabetical)
 * `limit` - Maximum items to display (default: unlimited)
 * `user_id` - Show specific user's wishlist (default: all items)
+* `show_filters` - Show/hide the entire filter panel (true/false, default: true)
+* `show_search` - Show/hide the search field (true/false, default: true)
+* `show_category` - Show/hide the category filter (true/false, default: true)
+* `show_tags` - Show/hide the tags filter (true/false, default: true)
+* `show_price` - Show/hide the price range filter (true/false, default: true)
+* `show_sort` - Show/hide the sort dropdown (true/false, default: true)
 
 = Perfect For =
 
@@ -85,11 +90,11 @@ Yes! The plugin includes built-in styling, but you can add custom CSS in the Set
 
 = Does it work with my theme? =
 
-Yes! The plugin is designed to work with any properly-coded WordPress theme. It uses theme-agnostic styling that adapts to your site.
+Yes. The plugin is designed to work with standard WordPress themes and includes its own frontend styling.
 
 = Can I export my wishlist data? =
 
-Yes! Go to Wishlist > Settings > Import/Export to export your data in CSV or JSON format.
+Yes. Go to Wishlist > Settings > Import/Export to export your data in CSV or JSON format.
 
 = Is it mobile-friendly? =
 
@@ -109,13 +114,13 @@ Yes! Go to Wishlist > Settings > Display to change the currency symbol and posit
 
 = Does it slow down my site? =
 
-No! The plugin is optimized for performance and only loads assets on pages where the shortcode is used.
+No. The plugin only loads frontend assets on pages where the shortcode or block is used.
 
 == Screenshots ==
 
 1. Admin items list with search and bulk actions
 2. Add/Edit item form with media library integration
-3. Categories management page
+3. Categories overview page
 4. Tags cloud and list view
 5. Settings page with multiple tabs
 6. Frontend wishlist grid display
@@ -126,22 +131,18 @@ No! The plugin is optimized for performance and only loads assets on pages where
 
 == Changelog ==
 
-= 1.0.0 =
-* Initial release
-* Admin dashboard with full CRUD functionality
-* Frontend display with shortcode
-* Category and tag management
-* Advanced filtering system
-* Responsive grid layouts
-* Import/Export functionality
-* Custom CSS support
-* AJAX filtering option
-* Translation ready
+= 1.0.5 =
+* Admin dashboard for wishlist item CRUD
+* Frontend display via shortcode and Gutenberg block
+* AJAX-powered filtering by search, category, tags, price, and sort
+* CSV and JSON export tools
+* Shortcode generator and custom CSS support
+* Responsive frontend card grid
 
 == Upgrade Notice ==
 
-= 1.0.0 =
-Initial release of Personal Wishlist Manager.
+= 1.0.5 =
+Current stable release of Personal Wishlist Manager.
 
 == Privacy Policy ==
 

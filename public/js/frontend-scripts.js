@@ -14,6 +14,7 @@
 		 */
 		var filterTimeout;
 		var currentSearchTerm = '';
+		var mobileFilterQuery = window.matchMedia('(max-width: 768px)');
 
 		function debounce(func, wait) {
 			return function() {
@@ -34,9 +35,6 @@
 			var sortValue = $('#pwm-sort-filter').val() || 'alphabetical';
 			var columns = $('.personal-wishlist-container').data('columns') || 3;
 
-			// Get selected tags
-			var selectedTags = $('#pwm-tags-filter').val() || [];
-
 			currentSearchTerm = searchValue;
 
 			// Show loading state
@@ -51,7 +49,6 @@
 					nonce: pwmFrontend.nonce,
 					search: searchValue,
 					category: categoryValue,
-					tags: selectedTags,
 					min_price: minPrice || 0,
 					max_price: maxPrice || 999999,
 					sort: sortValue,
@@ -157,10 +154,9 @@
 			var categoryValue = $('#pwm-category-filter').val();
 			var minPrice = $('#pwm-min-price-filter').val();
 			var maxPrice = $('#pwm-max-price-filter').val();
+			var minPriceDefault = parseFloat($('#pwm-min-price-filter').data('default-value'));
+			var maxPriceDefault = parseFloat($('#pwm-max-price-filter').data('default-value'));
 			var sortValue = $('#pwm-sort-filter').val();
-
-			// Get selected tags
-			var selectedTags = $('#pwm-tags-filter').val() || [];
 
 			if (searchValue) {
 				filters.push({
@@ -176,22 +172,14 @@
 				});
 			}
 
-			// Add tag filters
-			if (selectedTags.length > 0) {
-				selectedTags.forEach(function(tag) {
-					filters.push({
-						type: 'tag',
-						label: 'Tag: ' + tag,
-						value: tag
-					});
-				});
-			}
+			var hasCustomMin = minPrice !== '' && !isNaN(parseFloat(minPrice)) && parseFloat(minPrice) !== minPriceDefault;
+			var hasCustomMax = maxPrice !== '' && !isNaN(parseFloat(maxPrice)) && parseFloat(maxPrice) !== maxPriceDefault;
 
-			if (minPrice || maxPrice) {
+			if (hasCustomMin || hasCustomMax) {
 				var priceLabel = 'Price: ';
-				if (minPrice && maxPrice) {
+				if (hasCustomMin && hasCustomMax) {
 					priceLabel += '$' + minPrice + ' - $' + maxPrice;
-				} else if (minPrice) {
+				} else if (hasCustomMin) {
 					priceLabel += 'Min $' + minPrice;
 				} else {
 					priceLabel += 'Max $' + maxPrice;
@@ -242,6 +230,43 @@
 			} else {
 				$activeFilters.hide();
 			}
+
+			updateMobileFilterCount(filters.length);
+		}
+
+		function updateMobileFilterCount(count) {
+			var $count = $('#pwm-mobile-filter-count');
+			if (!$count.length) {
+				return;
+			}
+
+			if (count > 0) {
+				$count.text(count).show();
+			} else {
+				$count.hide();
+			}
+		}
+
+		function setMobileFiltersOpen(isOpen) {
+			var $wrapper = $('.wishlist-filters-wrapper');
+			var $toggle = $('#pwm-mobile-filter-toggle');
+
+			$wrapper.toggleClass('pwm-mobile-open', isOpen);
+			$toggle.attr('aria-expanded', isOpen ? 'true' : 'false');
+		}
+
+		function syncMobileFiltersState() {
+			if (!$('#pwm-mobile-filter-toggle').length) {
+				return;
+			}
+
+			if (mobileFilterQuery.matches) {
+				if (!$('.wishlist-filters-wrapper').hasClass('pwm-mobile-open')) {
+					setMobileFiltersOpen(false);
+				}
+			} else {
+				setMobileFiltersOpen(true);
+			}
 		}
 
 		function initLazyLoading() {
@@ -252,79 +277,15 @@
 			}
 		}
 
-		// Custom multiselect dropdown functionality
-		function initMultiselect() {
-			var $button = $('#pwm-tags-filter-btn');
-			var $dropdown = $('#pwm-tags-dropdown');
-			var $hiddenSelect = $('#pwm-tags-filter');
-			var $checkboxes = $dropdown.find('input[type="checkbox"]');
+		syncMobileFiltersState();
 
-			// Toggle dropdown
-			$button.on('click', function(e) {
-				e.stopPropagation();
-				$button.toggleClass('active');
-				$dropdown.toggleClass('active');
-			});
+		$(document).on('click', '#pwm-mobile-filter-toggle', function() {
+			setMobileFiltersOpen(!$('.wishlist-filters-wrapper').hasClass('pwm-mobile-open'));
+		});
 
-			// Handle checkbox changes
-			$checkboxes.on('change', function() {
-				syncMultiselectValues();
-				updateTagsDisplay();
-				applyFilters();
-			});
-
-			// Sync checkboxes with hidden select
-			function syncMultiselectValues() {
-				var selectedValues = [];
-				$checkboxes.filter(':checked').each(function() {
-					selectedValues.push($(this).val());
-				});
-				$hiddenSelect.val(selectedValues);
-			}
-
-			// Close dropdown when clicking outside
-			$(document).on('click', function(e) {
-				if (!$(e.target).closest('.pwm-multiselect-wrapper').length) {
-					$button.removeClass('active');
-					$dropdown.removeClass('active');
-				}
-			});
-
-			// Prevent dropdown from closing when clicking inside
-			$dropdown.on('click', function(e) {
-				e.stopPropagation();
-			});
-		}
-
-		// Update tags display to show count and selected tags
-		function updateTagsDisplay() {
-			var selectedValues = [];
-			$('#pwm-tags-dropdown input[type="checkbox"]:checked').each(function() {
-				selectedValues.push($(this).next('span').text().split(' (')[0]);
-			});
-
-			var $button = $('#pwm-tags-filter-btn');
-			var $text = $button.find('.pwm-multiselect-text');
-			var $label = $('.filter-label[for="pwm-tags-filter"]');
-			var baseText = $label.text().replace(/\s*\(\d+\)$/, '');
-
-			if (selectedValues.length > 0) {
-				// Update button text
-				if (selectedValues.length === 1) {
-					$text.text(selectedValues[0]);
-				} else {
-					$text.text(selectedValues.length + ' tags selected');
-				}
-				// Update label count
-				$label.html(baseText + ' <span class="filter-count">(' + selectedValues.length + ')</span>');
-			} else {
-				$text.text('Select tags...');
-				$label.text(baseText);
-			}
-		}
-
-		// Initialize custom multiselect
-		initMultiselect();
+		$(document).on('click', '#pwm-mobile-filter-done', function() {
+			setMobileFiltersOpen(false);
+		});
 
 		// Filter event listeners
 		$('#pwm-search-filter').on('input', debounce(applyFilters, 300));
@@ -336,13 +297,10 @@
 		$(document).on('click', '#pwm-clear-filters, #pwm-clear-filters-empty', function() {
 			$('#pwm-search-filter').val('');
 			$('#pwm-category-filter').val('');
-			$('#pwm-tags-dropdown input[type="checkbox"]').prop('checked', false);
-			$('#pwm-tags-filter').val(null);
 			$('#pwm-min-price-filter').val('');
 			$('#pwm-max-price-filter').val('');
 			$('#pwm-sort-filter').val('alphabetical');
 			currentSearchTerm = '';
-			updateTagsDisplay();
 			applyFilters();
 		});
 
@@ -359,16 +317,6 @@
 					break;
 				case 'category':
 					$('#pwm-category-filter').val('');
-					break;
-				case 'tag':
-					// Uncheck the specific tag checkbox
-					$('#pwm-tags-dropdown input[type="checkbox"][value="' + filterValue + '"]').prop('checked', false);
-					var selectedValues = [];
-					$('#pwm-tags-dropdown input[type="checkbox"]:checked').each(function() {
-						selectedValues.push($(this).val());
-					});
-					$('#pwm-tags-filter').val(selectedValues);
-					updateTagsDisplay();
 					break;
 				case 'price':
 					$('#pwm-min-price-filter').val('');
@@ -444,7 +392,7 @@
 		$(window).on('resize', function() {
 			clearTimeout(resizeTimeout);
 			resizeTimeout = setTimeout(function() {
-				// Re-initialize any responsive features if needed
+				syncMobileFiltersState();
 			}, 250);
 		});
 

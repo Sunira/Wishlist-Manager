@@ -60,7 +60,6 @@ function pwm_sanitize_item_data($data) {
 	return array(
 		'title' => sanitize_text_field($data['title']),
 		'category' => sanitize_text_field($data['category']),
-		'tags' => sanitize_text_field($data['tags']),
 		'image_url' => esc_url_raw($data['image_url']),
 		'product_url' => esc_url_raw($data['product_url']),
 		'price' => floatval($data['price']),
@@ -115,29 +114,6 @@ function pwm_validate_item_data($data) {
 function pwm_get_categories() {
 	$db = PWM_Database::get_instance();
 	return $db->get_categories();
-}
-
-/**
- * Get all tags
- *
- * @return array Array of tags with counts
- */
-function pwm_get_tags() {
-	$db = PWM_Database::get_instance();
-	return $db->get_tags();
-}
-
-/**
- * Parse tags string into array
- *
- * @param string $tags_string Comma-separated tags
- * @return array Array of tags
- */
-function pwm_parse_tags($tags_string) {
-	if (empty($tags_string)) {
-		return array();
-	}
-	return array_filter(array_map('trim', explode(',', $tags_string)));
 }
 
 /**
@@ -218,4 +194,51 @@ function pwm_get_sort_params($sort) {
 	}
 
 	return $params;
+}
+
+/**
+ * Get or initialize the quick add token.
+ *
+ * @return string
+ */
+function pwm_get_quick_add_token() {
+	$token = get_option('pwm_quick_add_token', '');
+
+	if (empty($token)) {
+		$token = wp_generate_password(40, false, false);
+		update_option('pwm_quick_add_token', $token);
+	}
+
+	return $token;
+}
+
+/**
+ * Build the admin-post endpoint URL for quick add.
+ *
+ * @return string
+ */
+function pwm_get_quick_add_endpoint_url() {
+	return add_query_arg(
+		array('action' => 'pwm_quick_add'),
+		admin_url('admin-post.php')
+	);
+}
+
+/**
+ * Build bookmarklet script for quick add.
+ *
+ * @return string
+ */
+function pwm_get_quick_add_bookmarklet() {
+	$base_url = add_query_arg(
+		array(
+			'action' => 'pwm_quick_add',
+			'token' => pwm_get_quick_add_token()
+		),
+		admin_url('admin-post.php')
+	);
+
+	$base_url_js = wp_json_encode($base_url);
+
+	return "javascript:(function(){function g(){var m=document.querySelector('meta[property=\"product:price:amount\"],meta[property=\"og:price:amount\"],meta[name=\"price\"],meta[itemprop=\"price\"]');if(m&&m.content){return m.content;}var t=document.body?document.body.innerText:'';var r=t.match(/(?:\\$|USD\\s?)(\\d{1,3}(?:,\\d{3})*(?:\\.\\d{1,2})?)/i);return r?r[1].replace(/,/g,''):'';}var img=(document.querySelector('meta[property=\"og:image\"]')||{}).content||'';if(!img&&document.images){for(var i=0;i<document.images.length;i++){var c=document.images[i];if(c&&c.naturalWidth>=300&&c.naturalHeight>=300&&c.src){img=c.src;break;}}}var d={title:document.title||'',product_url:location.href||'',image_url:img||'',price:g()};var u=" . $base_url_js . "+'&data='+encodeURIComponent(JSON.stringify(d));window.open(u,'_blank','noopener');})();";
 }

@@ -24,7 +24,6 @@
 			var showFilters = $('#pwm-gen-show-filters').is(':checked');
 			var showSearch = $('#pwm-gen-show-search').is(':checked');
 			var showCategory = $('#pwm-gen-show-category').is(':checked');
-			var showTags = $('#pwm-gen-show-tags').is(':checked');
 			var showPrice = $('#pwm-gen-show-price').is(':checked');
 			var showSort = $('#pwm-gen-show-sort').is(':checked');
 
@@ -58,9 +57,6 @@
 				}
 				if (!showCategory) {
 					params.push('show_category="false"');
-				}
-				if (!showTags) {
-					params.push('show_tags="false"');
 				}
 				if (!showPrice) {
 					params.push('show_price="false"');
@@ -255,43 +251,6 @@
 		});
 
 		/**
-		 * Tag Autocomplete
-		 */
-		if ($('#tags').length > 0) {
-			$('#tags').autocomplete({
-				source: function(request, response) {
-					// Extract the last tag being typed
-					var term = request.term.split(',').pop().trim();
-
-					$.ajax({
-						url: pwmAdmin.ajaxurl,
-						dataType: 'json',
-						data: {
-							action: 'pwm_get_tags',
-							nonce: pwmAdmin.nonce,
-							term: term
-						},
-						success: function(data) {
-							response(data);
-						}
-					});
-				},
-				select: function(event, ui) {
-					var terms = this.value.split(',');
-					// Remove the current input
-					terms.pop();
-					// Add the selected item
-					terms.push(ui.item.value);
-					// Add placeholder to get the comma-and-space at the end
-					terms.push('');
-					this.value = terms.join(', ');
-					return false;
-				},
-				minLength: 1
-			});
-		}
-
-		/**
 		 * Delete Item Confirmation
 		 */
 		$('.pwm-delete-item').on('click', function(e) {
@@ -347,23 +306,6 @@
 		$('.editinline').on('click', function() {
 			// WordPress quick edit functionality
 			// Can be extended for custom fields if needed
-		});
-
-		/**
-		 * Tags View Toggle
-		 */
-		$('#pwm-view-cloud').on('click', function() {
-			$('#pwm-cloud-view').show();
-			$('#pwm-list-view').hide();
-			$(this).addClass('button-primary');
-			$('#pwm-view-list').removeClass('button-primary');
-		});
-
-		$('#pwm-view-list').on('click', function() {
-			$('#pwm-cloud-view').hide();
-			$('#pwm-list-view').show();
-			$(this).addClass('button-primary');
-			$('#pwm-view-cloud').removeClass('button-primary');
 		});
 
 	});

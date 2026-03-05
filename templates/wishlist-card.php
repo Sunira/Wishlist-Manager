@@ -10,9 +10,6 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-// Parse tags
-$item_tags = pwm_parse_tags($item->tags);
-
 // Check if user can edit
 $can_edit = current_user_can('manage_wishlist_items');
 
@@ -24,7 +21,7 @@ ob_start();
 <div class="wishlist-card" data-item-id="<?php echo esc_attr($item->id); ?>">
 	<?php if ($can_edit) : ?>
 		<div class="wishlist-card-actions">
-			<a href="<?php echo esc_url(add_query_arg(array('page' => 'wishlist-add-new', 'item' => $item->id), admin_url('admin.php'))); ?>"
+			<a href="<?php echo esc_url(add_query_arg(array('page' => 'wishlist', 'action' => 'edit', 'item' => $item->id), admin_url('admin.php'))); ?>"
 			   class="card-action-btn edit-btn"
 			   title="<?php _e('Edit item', 'personal-wishlist-manager'); ?>">
 				<svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -42,7 +39,13 @@ ob_start();
 	<?php endif; ?>
 
 	<div class="wishlist-card-image">
-		<img src="<?php echo esc_url($item->image_url); ?>" alt="<?php echo esc_attr($item->title); ?>" loading="lazy">
+		<a href="<?php echo esc_url($item->product_url); ?>"
+		   class="wishlist-card-image-link"
+		   target="_blank"
+		   rel="noopener noreferrer"
+		   title="<?php _e('View Product', 'personal-wishlist-manager'); ?>">
+			<img src="<?php echo esc_url($item->image_url); ?>" alt="<?php echo esc_attr($item->title); ?>" loading="lazy">
+		</a>
 		<span class="wishlist-card-price"><?php echo pwm_format_price($item->price); ?></span>
 		<a href="<?php echo esc_url($item->product_url); ?>"
 		   class="wishlist-card-shop-btn"
@@ -63,18 +66,11 @@ ob_start();
 		</div>
 
 		<?php if (!empty($item->reason)) : ?>
-			<span class="wishlist-card-reason">
-				<?php echo wp_kses_post(wpautop($item->reason)); ?>
-			</span>
-		<?php endif; ?>
-
-		<?php if (!empty($item_tags)) : ?>
-			<div class="wishlist-card-tags">
-				<?php foreach ($item_tags as $tag) : ?>
-					<span class="wishlist-tag"><?php echo esc_html($tag); ?></span>
-				<?php endforeach; ?>
+			<div class="wishlist-card-reason">
+				<span><?php echo wp_kses_post($item->reason); ?></span>
 			</div>
 		<?php endif; ?>
+
 	</div>
 </div>
 

@@ -15,21 +15,35 @@ if (!isset($filter_options)) {
 	$filter_options = array(
 		'show_search' => true,
 		'show_category' => true,
-		'show_tags' => true,
 		'show_price' => true,
 		'show_sort' => true
 	);
 }
 
-// Get available categories, tags, and price range
+// Get available categories and price range
 $db = PWM_Database::get_instance();
 $categories = $db->get_categories();
-$tags = $db->get_tags();
 $price_range = $db->get_price_range();
 ?>
 
 <div class="wishlist-filters-wrapper">
-	<div class="wishlist-filters">
+	<div class="pwm-mobile-filter-bar">
+		<button
+			type="button"
+			id="pwm-mobile-filter-toggle"
+			class="pwm-mobile-filter-toggle"
+			aria-expanded="false"
+			aria-controls="pwm-filter-panel"
+		>
+			<span class="pwm-mobile-filter-toggle-label"><?php _e('Filters', 'personal-wishlist-manager'); ?></span>
+			<span class="pwm-mobile-filter-toggle-meta">
+				<span class="pwm-mobile-filter-count" id="pwm-mobile-filter-count" style="display: none;">0</span>
+				<span class="pwm-mobile-filter-toggle-icon">▼</span>
+			</span>
+		</button>
+	</div>
+
+	<div class="wishlist-filters" id="pwm-filter-panel">
 		<!-- Search Filter -->
 		<?php if ($filter_options['show_search']) : ?>
 			<div class="filter-group">
@@ -63,68 +77,46 @@ $price_range = $db->get_price_range();
 			</div>
 		<?php endif; ?>
 
-		<!-- Tags Filter -->
-		<?php if ($filter_options['show_tags'] && !empty($tags)) : ?>
-			<div class="filter-group">
-				<label for="pwm-tags-filter" class="filter-label">
-					<?php _e('Tags', 'personal-wishlist-manager'); ?>
-				</label>
-				<div class="pwm-multiselect-wrapper">
-					<button type="button" class="pwm-multiselect-button filter-select" id="pwm-tags-filter-btn">
-						<span class="pwm-multiselect-text"><?php _e('Select tags...', 'personal-wishlist-manager'); ?></span>
-						<span class="pwm-multiselect-arrow">▼</span>
-					</button>
-					<div class="pwm-multiselect-dropdown" id="pwm-tags-dropdown">
-						<?php foreach ($tags as $tag => $count) : ?>
-							<label class="pwm-multiselect-option">
-								<input type="checkbox" name="pwm-tag-filter" value="<?php echo esc_attr($tag); ?>">
-								<span><?php echo esc_html($tag); ?> (<?php echo esc_html($count); ?>)</span>
-							</label>
-						<?php endforeach; ?>
-					</div>
-					<select id="pwm-tags-filter" class="pwm-multiselect-hidden" multiple style="display: none;">
-						<?php foreach ($tags as $tag => $count) : ?>
-							<option value="<?php echo esc_attr($tag); ?>">
-								<?php echo esc_html($tag); ?> (<?php echo esc_html($count); ?>)
-							</option>
-						<?php endforeach; ?>
-					</select>
-				</div>
-			</div>
-		<?php endif; ?>
-
 		<!-- Price Range Filter -->
 		<?php if ($filter_options['show_price']) : ?>
 			<div class="filter-group filter-group-price">
 				<label class="filter-label">
 					<?php _e('Price Range', 'personal-wishlist-manager'); ?>
 				</label>
-				<div class="price-inputs">
-					<div class="price-input-wrapper">
-						<span class="price-prefix">$</span>
-						<input
-							type="number"
-							id="pwm-min-price-filter"
-							class="filter-input price-input"
-							placeholder="<?php esc_attr_e('Min', 'personal-wishlist-manager'); ?>"
-							min="0"
-							step="0.01"
-							value="<?php echo esc_attr($price_range['min']); ?>"
-						>
-					</div>
-					<span class="price-separator">-</span>
-					<div class="price-input-wrapper">
-						<span class="price-prefix">$</span>
-						<input
-							type="number"
-							id="pwm-max-price-filter"
-							class="filter-input price-input"
-							placeholder="<?php esc_attr_e('Max', 'personal-wishlist-manager'); ?>"
-							min="0"
-							step="0.01"
-							value="<?php echo esc_attr($price_range['max']); ?>"
-						>
-					</div>
+					<div class="price-inputs">
+							<div class="price-input-wrapper price-input-min">
+								<label for="pwm-min-price-filter" class="price-input-label">
+									<?php _e('Min', 'personal-wishlist-manager'); ?>
+								</label>
+								<span class="price-prefix">$</span>
+								<input
+									type="number"
+									id="pwm-min-price-filter"
+									class="filter-input price-input"
+								placeholder="0"
+								min="0"
+								step="0.01"
+								data-default-value="<?php echo esc_attr($price_range['min']); ?>"
+								value="<?php echo esc_attr($price_range['min']); ?>"
+							>
+						</div>
+						<span class="price-separator">-</span>
+							<div class="price-input-wrapper price-input-max">
+								<label for="pwm-max-price-filter" class="price-input-label">
+									<?php _e('Max', 'personal-wishlist-manager'); ?>
+								</label>
+								<span class="price-prefix">$</span>
+								<input
+									type="number"
+									id="pwm-max-price-filter"
+								class="filter-input price-input"
+								placeholder="0"
+								min="0"
+								step="0.01"
+								data-default-value="<?php echo esc_attr($price_range['max']); ?>"
+								value="<?php echo esc_attr($price_range['max']); ?>"
+							>
+						</div>
 				</div>
 			</div>
 		<?php endif; ?>
@@ -145,6 +137,11 @@ $price_range = $db->get_price_range();
 			</div>
 		<?php endif; ?>
 
+		<div class="pwm-mobile-filter-actions">
+			<button type="button" id="pwm-mobile-filter-done" class="pwm-mobile-filter-done">
+				<?php _e('Done', 'personal-wishlist-manager'); ?>
+			</button>
+		</div>
 	</div>
 
 	<!-- Active Filters Display -->

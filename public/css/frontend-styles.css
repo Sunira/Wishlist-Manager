@@ -1,12 +1,28 @@
 /**
  * Frontend styles for Personal Wishlist Manager - Modern Design
+ * Enhanced specificity to override theme styles
+ *
+ * THEME COMPATIBILITY:
+ * This stylesheet uses high specificity selectors and !important declarations
+ * to ensure plugin styles supersede theme styles. All selectors are prefixed
+ * with .personal-wishlist-container to create isolation.
+ *
+ * Key overrides:
+ * - Typography (fonts, sizes, weights, transforms)
+ * - Link styles (colors, hover effects)
+ * - Form inputs (appearance, padding, borders)
+ * - Buttons (transforms, padding, backgrounds)
+ * - List styles (resets margins/padding)
+ * - Images (max-width, borders, positioning)
  *
  * @package Personal_Wishlist_Manager
  */
 
-/* Reset and base styles */
-.personal-wishlist-container * {
-	box-sizing: border-box;
+/* Reset and base styles with high specificity */
+.personal-wishlist-container *,
+.personal-wishlist-container *::before,
+.personal-wishlist-container *::after {
+	box-sizing: border-box !important;
 }
 
 /* Main container */
@@ -14,8 +30,54 @@
 	max-width: 1400px;
 	margin: 0 auto;
 	padding: 0;
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-	color: #1a1a1a;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+	color: #1a1a1a !important;
+	line-height: 1.5 !important;
+}
+
+/* Override theme typography */
+.personal-wishlist-container p,
+.personal-wishlist-container span {
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+	color: inherit !important;
+	font-size: inherit !important;
+	line-height: inherit !important;
+}
+
+.personal-wishlist-container h1,
+.personal-wishlist-container h2,
+.personal-wishlist-container h3,
+.personal-wishlist-container h4,
+.personal-wishlist-container h5,
+.personal-wishlist-container h6 {
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+	font-weight: 600 !important;
+	text-transform: none !important;
+	letter-spacing: normal !important;
+}
+
+/* Override theme link styles */
+.personal-wishlist-container a {
+	text-decoration: none !important;
+	color: inherit !important;
+}
+
+.personal-wishlist-container a:hover {
+	text-decoration: none !important;
+}
+
+/* Override theme list styles */
+.personal-wishlist-container ul,
+.personal-wishlist-container ol {
+	list-style: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.personal-wishlist-container li {
+	list-style: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
 }
 
 /* ===================================
@@ -24,6 +86,69 @@
 
 .wishlist-filters-wrapper {
 	margin-bottom: 32px;
+}
+
+.pwm-mobile-filter-bar {
+	display: none;
+}
+
+.personal-wishlist-container .pwm-mobile-filter-toggle,
+.personal-wishlist-container button.pwm-mobile-filter-toggle {
+	width: 100% !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: space-between !important;
+	padding: 14px 16px !important;
+	background: #fff !important;
+	border: 1px solid #d1d5db !important;
+	border-radius: 10px !important;
+	font-size: 16px !important;
+	font-weight: 600 !important;
+	color: #111827 !important;
+	line-height: 1.3 !important;
+}
+
+.pwm-mobile-filter-toggle-meta {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.pwm-mobile-filter-count {
+	min-width: 22px;
+	height: 22px;
+	padding: 0 6px;
+	border-radius: 999px;
+	background: #3b82f6;
+	color: #fff;
+	font-size: 12px;
+	font-weight: 700;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pwm-mobile-filter-toggle-icon {
+	font-size: 11px;
+	color: #6b7280;
+	transition: transform 0.2s ease;
+}
+
+.pwm-mobile-filter-actions {
+	display: none;
+}
+
+.personal-wishlist-container .pwm-mobile-filter-done,
+.personal-wishlist-container button.pwm-mobile-filter-done {
+	width: 100% !important;
+	padding: 12px 14px !important;
+	border: 1px solid #d1d5db !important;
+	border-radius: 8px !important;
+	background: #fff !important;
+	color: #1f2937 !important;
+	font-size: 15px !important;
+	font-weight: 600 !important;
+	line-height: 1.3 !important;
 }
 
 .wishlist-filters {
@@ -55,37 +180,47 @@
 	color: #3b82f6;
 }
 
-.filter-input,
-.filter-select {
-	width: 100%;
-	padding: 10px 12px;
-	border: 1px solid #d1d5db;
-	border-radius: 6px;
-	font-size: 14px;
-	font-family: inherit;
-	color: #1a1a1a;
-	background: #fff;
-	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+.personal-wishlist-container .filter-input,
+.personal-wishlist-container input.filter-input,
+.personal-wishlist-container .filter-select,
+.personal-wishlist-container select.filter-select {
+	width: 100% !important;
+	padding: 10px 12px !important;
+	border: 1px solid #d1d5db !important;
+	border-radius: 6px !important;
+	font-size: 14px !important;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+	color: #1a1a1a !important;
+	background: #fff !important;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+	box-sizing: border-box !important;
+	line-height: 1.5 !important;
 }
 
-.filter-input:focus,
-.filter-select:focus {
-	outline: none;
-	border-color: #3b82f6;
-	box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+.personal-wishlist-container .filter-input:focus,
+.personal-wishlist-container input.filter-input:focus,
+.personal-wishlist-container .filter-select:focus,
+.personal-wishlist-container select.filter-select:focus {
+	outline: none !important;
+	border-color: #3b82f6 !important;
+	box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
 }
 
-.filter-input::placeholder {
-	color: #9ca3af;
+.personal-wishlist-container .filter-input::placeholder,
+.personal-wishlist-container input.filter-input::placeholder {
+	color: #9ca3af !important;
 }
 
-.filter-select {
-	cursor: pointer;
-	appearance: none;
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23374151' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
-	background-repeat: no-repeat;
-	background-position: right 12px center;
-	padding-right: 36px;
+.personal-wishlist-container .filter-select,
+.personal-wishlist-container select.filter-select {
+	cursor: pointer !important;
+	appearance: none !important;
+	-webkit-appearance: none !important;
+	-moz-appearance: none !important;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23374151' d='M6 9L1 4h10z'/%3E%3C/svg%3E") !important;
+	background-repeat: no-repeat !important;
+	background-position: right 12px center !important;
+	padding-right: 36px !important;
 }
 
 /* Custom Multiselect Dropdown */
@@ -131,8 +266,15 @@
 .pwm-multiselect-arrow {
 	margin-left: 8px;
 	transition: transform 0.2s ease;
-	font-size: 10px;
-	color: #6b7280;
+	width: 12px;
+	height: 12px;
+	display: inline-block;
+	font-size: 0;
+	line-height: 0;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23374151' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: 12px 12px;
 }
 
 .pwm-multiselect-button.active .pwm-multiselect-arrow {
@@ -203,10 +345,19 @@
 	flex: 1;
 }
 
+.price-input-label {
+	display: block;
+	margin: 0 0 4px 0;
+	font-size: 12px;
+	font-weight: 600;
+	color: #6b7280;
+	line-height: 1.2;
+}
+
 .price-prefix {
 	position: absolute;
 	left: 12px;
-	top: 50%;
+	top: calc(50% + 9px);
 	transform: translateY(-50%);
 	font-size: 14px;
 	font-weight: 600;
@@ -216,6 +367,14 @@
 
 .price-input {
 	padding-left: 28px;
+	-moz-appearance: textfield;
+	appearance: textfield;
+}
+
+.price-input::-webkit-outer-spin-button,
+.price-input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
 }
 
 .price-separator {
@@ -224,26 +383,35 @@
 	flex-shrink: 0;
 }
 
-.filter-clear-btn {
-	padding: 10px 20px;
-	background: #fff;
-	border: 1px solid #d1d5db;
-	border-radius: 6px;
-	font-size: 14px;
-	font-weight: 600;
-	color: #374151;
-	cursor: pointer;
-	transition: all 0.2s ease;
-	white-space: nowrap;
+.personal-wishlist-container .filter-clear-btn,
+.personal-wishlist-container button.filter-clear-btn {
+	padding: 10px 20px !important;
+	background: #fff !important;
+	border: 1px solid #d1d5db !important;
+	border-radius: 6px !important;
+	font-size: 14px !important;
+	font-weight: 600 !important;
+	color: #374151 !important;
+	cursor: pointer !important;
+	transition: all 0.2s ease !important;
+	white-space: nowrap !important;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+	text-transform: none !important;
+	letter-spacing: normal !important;
+	line-height: 1.5 !important;
 }
 
-.filter-clear-btn:hover {
-	background: #f9fafb;
-	border-color: #9ca3af;
+.personal-wishlist-container .filter-clear-btn:hover,
+.personal-wishlist-container button.filter-clear-btn:hover {
+	background: #f9fafb !important;
+	border-color: #9ca3af !important;
+	text-decoration: none !important;
+	opacity: 1 !important;
 }
 
-.filter-clear-btn:active {
-	transform: scale(0.98);
+.personal-wishlist-container .filter-clear-btn:active,
+.personal-wishlist-container button.filter-clear-btn:active {
+	transform: scale(0.98) !important;
 }
 
 
@@ -279,48 +447,54 @@
 	flex-shrink: 0;
 }
 
-.active-filter-badge {
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-	background: #3b82f6;
-	color: #fff;
-	padding: 6px 12px;
-	border-radius: 6px;
-	font-size: 13px;
-	font-weight: 500;
+.personal-wishlist-container .active-filter-badge {
+	display: inline-flex !important;
+	align-items: center !important;
+	gap: 8px !important;
+	background: #3b82f6 !important;
+	color: #fff !important;
+	padding: 6px 12px !important;
+	border-radius: 6px !important;
+	font-size: 13px !important;
+	font-weight: 500 !important;
 }
 
-.active-filter-badge .remove-filter {
-	background: none;
-	border: none;
-	color: #fff;
-	font-size: 18px;
-	font-weight: 700;
-	line-height: 1;
-	cursor: pointer;
-	padding: 0;
-	margin: 0;
-	width: 16px;
-	height: 16px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 3px;
-	transition: background 0.2s ease;
+.personal-wishlist-container .active-filter-badge .remove-filter,
+.personal-wishlist-container .active-filter-badge button.remove-filter {
+	background: none !important;
+	border: none !important;
+	color: #fff !important;
+	font-size: 18px !important;
+	font-weight: 700 !important;
+	line-height: 1 !important;
+	cursor: pointer !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	width: 16px !important;
+	height: 16px !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	border-radius: 3px !important;
+	transition: background 0.2s ease !important;
 }
 
-.active-filter-badge .remove-filter:hover {
-	background: rgba(255, 255, 255, 0.2);
+.personal-wishlist-container .active-filter-badge .remove-filter:hover,
+.personal-wishlist-container .active-filter-badge button.remove-filter:hover {
+	background: rgba(255, 255, 255, 0.2) !important;
 }
 
-/* Search highlighting */
-mark.pwm-highlight {
-	background: #fef08a;
-	color: #1a1a1a;
-	padding: 2px 4px;
-	border-radius: 3px;
-	font-weight: 600;
+/* Search highlighting - override theme's mark styles */
+.personal-wishlist-container mark.pwm-highlight,
+.personal-wishlist-container mark {
+	background: #fef08a !important;
+	background-color: #fef08a !important;
+	color: #1a1a1a !important;
+	padding: 2px 4px !important;
+	border-radius: 3px !important;
+	font-weight: 600 !important;
+	border: none !important;
+	border-bottom: none !important;
 }
 
 /* ===================================
@@ -404,43 +578,52 @@ mark.pwm-highlight {
 	opacity: 1;
 }
 
-.card-action-btn {
-	background: rgba(255, 255, 255, 0.95);
-	border: 1px solid #e5e7eb;
-	border-radius: 6px;
-	width: 32px;
-	height: 32px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: pointer;
-	transition: all 0.2s ease;
-	text-decoration: none;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.personal-wishlist-container .card-action-btn,
+.personal-wishlist-container a.card-action-btn {
+	background: rgba(255, 255, 255, 0.95) !important;
+	border: 1px solid #e5e7eb !important;
+	border-radius: 6px !important;
+	width: 32px !important;
+	height: 32px !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	cursor: pointer !important;
+	transition: all 0.2s ease !important;
+	text-decoration: none !important;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
 }
 
-.card-action-btn:hover {
-	background: #fff;
-	border-color: #d1d5db;
-	transform: scale(1.05);
+.personal-wishlist-container .card-action-btn:hover,
+.personal-wishlist-container a.card-action-btn:hover {
+	background: #fff !important;
+	border-color: #d1d5db !important;
+	transform: scale(1.05) !important;
+	text-decoration: none !important;
 }
 
-.edit-btn {
-	color: #3b82f6;
+.personal-wishlist-container .edit-btn,
+.personal-wishlist-container a.edit-btn {
+	color: #3b82f6 !important;
 }
 
-.delete-btn {
-	color: #ef4444;
+.personal-wishlist-container .delete-btn,
+.personal-wishlist-container a.delete-btn {
+	color: #ef4444 !important;
 }
 
-.edit-btn:hover {
-	background: #eff6ff;
-	border-color: #3b82f6;
+.personal-wishlist-container .edit-btn:hover,
+.personal-wishlist-container a.edit-btn:hover {
+	background: #eff6ff !important;
+	border-color: #3b82f6 !important;
+	color: #3b82f6 !important;
 }
 
-.delete-btn:hover {
-	background: #fef2f2;
-	border-color: #ef4444;
+.personal-wishlist-container .delete-btn:hover,
+.personal-wishlist-container a.delete-btn:hover {
+	background: #fef2f2 !important;
+	border-color: #ef4444 !important;
+	color: #ef4444 !important;
 }
 
 /* Card image */
@@ -452,13 +635,18 @@ mark.pwm-highlight {
 	background: #f9fafb;
 }
 
-.wishlist-card-image img {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
+.personal-wishlist-container .wishlist-card-image img {
+	position: absolute !important;
+	top: 0 !important;
+	left: 0 !important;
+	width: 100% !important;
+	height: 100% !important;
+	object-fit: cover !important;
+	max-width: 100% !important;
+	border: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	vertical-align: middle !important;
 }
 
 .wishlist-card-price {
@@ -477,39 +665,43 @@ mark.pwm-highlight {
 }
 
 /* Shopping bag button - positioned in bottom right of image */
-.wishlist-card-shop-btn {
-	position: absolute;
-	bottom: 12px;
-	right: 12px;
-	background: #fff;
-	color: #1a1a1a;
-	width: 40px;
-	height: 40px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 6px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	border: 1px solid #e5e7eb;
-	transition: all 0.2s ease;
-	z-index: 5;
-	text-decoration: none;
+.personal-wishlist-container .wishlist-card-shop-btn,
+.personal-wishlist-container a.wishlist-card-shop-btn {
+	position: absolute !important;
+	bottom: 12px !important;
+	right: 12px !important;
+	background: #fff !important;
+	color: #1a1a1a !important;
+	width: 40px !important;
+	height: 40px !important;
+	display: flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	border-radius: 6px !important;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+	border: 1px solid #e5e7eb !important;
+	transition: all 0.2s ease !important;
+	z-index: 5 !important;
+	text-decoration: none !important;
 }
 
-.wishlist-card-shop-btn:hover {
-	background: #3b82f6;
-	color: #fff;
-	border-color: #3b82f6;
-	transform: scale(1.05);
+.personal-wishlist-container .wishlist-card-shop-btn:hover,
+.personal-wishlist-container a.wishlist-card-shop-btn:hover {
+	background: #3b82f6 !important;
+	color: #fff !important;
+	border-color: #3b82f6 !important;
+	transform: scale(1.05) !important;
+	text-decoration: none !important;
 }
 
-.wishlist-card-shop-btn:focus {
-	outline: 2px solid #3b82f6;
-	outline-offset: 2px;
+.personal-wishlist-container .wishlist-card-shop-btn:focus,
+.personal-wishlist-container a.wishlist-card-shop-btn:focus {
+	outline: 2px solid #3b82f6 !important;
+	outline-offset: 2px !important;
 }
 
-.wishlist-card-shop-btn svg {
-	flex-shrink: 0;
+.personal-wishlist-container .wishlist-card-shop-btn svg {
+	flex-shrink: 0 !important;
 }
 
 /* Card content */
@@ -530,13 +722,17 @@ mark.pwm-highlight {
 	margin-bottom: 4px;
 }
 
-.wishlist-card-title {
-	margin: 0;
-	font-size: 17px;
-	font-weight: 600;
-	line-height: 1.4;
-	color: #1a1a1a;
-	flex: 1;
+.personal-wishlist-container .wishlist-card-title,
+.personal-wishlist-container h3.wishlist-card-title {
+	margin: 0 !important;
+	font-size: 17px !important;
+	font-weight: 600 !important;
+	line-height: 1.4 !important;
+	color: #1a1a1a !important;
+	flex: 1 !important;
+	text-transform: none !important;
+	letter-spacing: normal !important;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
 }
 
 .wishlist-card-category {
@@ -551,48 +747,31 @@ mark.pwm-highlight {
 	align-self: flex-start;
 }
 
-.wishlist-card-reason {
-	background: #fffbeb;
-	padding: 12px;
-	border-left: 3px solid #fbbf24;
-	border-radius: 4px;
-	font-size: 14px;
-	line-height: 1.5;
-	color: #78350f;
+.personal-wishlist-container .wishlist-card-reason {
+	background: #fffbeb !important;
+	padding: 12px !important;
+	border-left: 3px solid #fbbf24 !important;
+	border-radius: 4px !important;
+	font-size: 14px !important;
+	line-height: 1.5 !important;
+	color: #78350f !important;
+	border-top: none !important;
+	border-right: none !important;
+	border-bottom: none !important;
 }
 
-.wishlist-card-reason p {
-	margin: 0 0 8px 0;
+.personal-wishlist-container .wishlist-card-reason p,
+.personal-wishlist-container .wishlist-card-reason span {
+	margin: 0 0 8px 0 !important;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+	color: #78350f !important;
+	font-size: 14px !important;
+	line-height: 1.5 !important;
 }
 
-.wishlist-card-reason p:last-child {
-	margin-bottom: 0;
-}
-
-/* Tags at bottom - horizontal layout */
-.wishlist-card-tags {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 6px;
-	margin-top: auto;
-	padding-top: 4px;
-}
-
-.wishlist-tag {
-	display: inline-block;
-	border: 1px solid #d1d5db;
-	color: #6b7280;
-	padding: 4px 10px;
-	border-radius: 6px;
-	font-size: 12px;
-	font-weight: 500;
-	background: #fff;
-	transition: all 0.2s ease;
-}
-
-.wishlist-tag:hover {
-	border-color: #9ca3af;
-	color: #374151;
+.personal-wishlist-container .wishlist-card-reason p:last-child,
+.personal-wishlist-container .wishlist-card-reason span:last-child {
+	margin-bottom: 0 !important;
 }
 
 /* ===================================
@@ -607,28 +786,37 @@ mark.pwm-highlight {
 	border-radius: 12px;
 }
 
-.wishlist-empty-state p {
-	font-size: 16px;
-	color: #6b7280;
-	margin-bottom: 20px;
+.personal-wishlist-container .wishlist-empty-state p {
+	font-size: 16px !important;
+	color: #6b7280 !important;
+	margin-bottom: 20px !important;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+	line-height: 1.5 !important;
 }
 
-.wishlist-empty-state .button {
-	padding: 12px 24px;
-	font-size: 15px;
-	background: #3b82f6;
-	color: #fff;
-	border: none;
-	border-radius: 6px;
-	font-weight: 600;
-	cursor: pointer;
-	transition: background 0.2s ease;
-	text-decoration: none;
-	display: inline-block;
+.personal-wishlist-container .wishlist-empty-state .button,
+.personal-wishlist-container .wishlist-empty-state button {
+	padding: 12px 24px !important;
+	font-size: 15px !important;
+	background: #3b82f6 !important;
+	color: #fff !important;
+	border: none !important;
+	border-radius: 6px !important;
+	font-weight: 600 !important;
+	cursor: pointer !important;
+	transition: background 0.2s ease !important;
+	text-decoration: none !important;
+	display: inline-block !important;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif !important;
+	text-transform: none !important;
+	letter-spacing: normal !important;
+	line-height: 1.5 !important;
 }
 
-.wishlist-empty-state .button:hover {
-	background: #2563eb;
+.personal-wishlist-container .wishlist-empty-state .button:hover,
+.personal-wishlist-container .wishlist-empty-state button:hover {
+	background: #2563eb !important;
+	opacity: 1 !important;
 }
 
 /* ===================================
@@ -677,15 +865,66 @@ mark.pwm-highlight {
 		padding: 0 16px;
 	}
 
+	.pwm-mobile-filter-bar {
+		display: block;
+	}
+
+	.wishlist-filters-wrapper {
+		margin-bottom: 20px;
+	}
+
+	.wishlist-filters-wrapper:not(.pwm-mobile-open) .wishlist-filters {
+		display: none;
+	}
+
+	.wishlist-filters-wrapper.pwm-mobile-open .pwm-mobile-filter-toggle-icon {
+		transform: rotate(180deg);
+	}
+
 	.wishlist-filters {
 		grid-template-columns: 1fr;
-		padding: 16px;
-		gap: 16px;
+		padding: 12px;
+		gap: 10px;
+		margin-top: 8px;
+		border-radius: 10px;
+	}
+
+	.filter-group {
+		gap: 5px;
+	}
+
+	.filter-label {
+		font-size: 12px;
+	}
+
+	.personal-wishlist-container .filter-input,
+	.personal-wishlist-container input.filter-input,
+	.personal-wishlist-container .filter-select,
+	.personal-wishlist-container select.filter-select,
+	.personal-wishlist-container .pwm-multiselect-button {
+		min-height: 46px !important;
+		padding-top: 10px !important;
+		padding-bottom: 10px !important;
+		font-size: 16px !important;
+	}
+
+	.personal-wishlist-container .filter-group-price .price-input {
+		font-size: 18px !important;
+		font-weight: 600 !important;
+	}
+
+	.personal-wishlist-container .price-prefix {
+		font-size: 15px !important;
 	}
 
 	.filter-group-price .price-inputs {
-		flex-direction: column;
-		gap: 12px;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 8px;
+	}
+
+	.filter-group-price .price-input-wrapper {
+		width: 100%;
 	}
 
 	.price-separator {
@@ -697,13 +936,51 @@ mark.pwm-highlight {
 	}
 
 	.active-filters {
-		flex-direction: column;
-		align-items: flex-start;
+		padding: 12px;
+		margin-top: 10px;
+		gap: 8px;
+	}
+
+	.active-filters-label {
+		font-size: 12px;
+	}
+
+	.active-filters .filter-clear-btn {
+		margin-left: 0;
+		width: 100%;
+	}
+
+	.pwm-mobile-filter-actions {
+		display: block;
+		margin-top: 2px;
 	}
 
 	.personal-wishlist-grid {
 		grid-template-columns: 1fr !important;
 		gap: 16px;
+	}
+
+	.personal-wishlist-container .wishlist-card-title,
+	.personal-wishlist-container h3.wishlist-card-title {
+		font-size: 20px !important;
+		line-height: 1.35 !important;
+	}
+
+	.personal-wishlist-container .wishlist-card-category {
+		font-size: 15px !important;
+		padding: 7px 12px !important;
+	}
+
+	.personal-wishlist-container .wishlist-card-price {
+		font-size: 18px !important;
+		padding: 7px 12px !important;
+	}
+
+	.personal-wishlist-container .wishlist-card-reason,
+	.personal-wishlist-container .wishlist-card-reason p,
+	.personal-wishlist-container .wishlist-card-reason span {
+		font-size: 16px !important;
+		line-height: 1.55 !important;
 	}
 
 	.wishlist-card-actions {
@@ -718,18 +995,23 @@ mark.pwm-highlight {
 		align-items: flex-start;
 	}
 
-	.wishlist-card-title {
-		font-size: 16px;
+	.personal-wishlist-container .wishlist-card-title,
+	.personal-wishlist-container h3.wishlist-card-title {
+		font-size: 19px !important;
+		line-height: 1.35 !important;
 	}
 
-	.wishlist-card-category {
-		font-size: 12px;
+	.personal-wishlist-container .wishlist-card-category {
+		font-size: 14px !important;
+		padding: 6px 10px !important;
 		align-self: flex-start;
 	}
 
-	.wishlist-tag {
-		font-size: 11px;
-		padding: 3px 8px;
+	.personal-wishlist-container .wishlist-card-reason,
+	.personal-wishlist-container .wishlist-card-reason p,
+	.personal-wishlist-container .wishlist-card-reason span {
+		font-size: 15px !important;
+		line-height: 1.5 !important;
 	}
 
 	.wishlist-card-shop-btn {
@@ -744,9 +1026,9 @@ mark.pwm-highlight {
 		height: 16px;
 	}
 
-	.wishlist-card-price {
-		font-size: 14px;
-		padding: 5px 10px;
+	.personal-wishlist-container .wishlist-card-price {
+		font-size: 17px !important;
+		padding: 6px 11px !important;
 	}
 }
 

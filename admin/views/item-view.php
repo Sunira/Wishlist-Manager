@@ -23,12 +23,11 @@ if (!$item) {
 	wp_die(__('Wishlist item not found.', 'personal-wishlist-manager'));
 }
 
-$item_tags = pwm_parse_tags($item->tags);
 ?>
 
 <div class="wrap">
 	<h1 class="wp-heading-inline"><?php echo esc_html($item->title); ?></h1>
-	<a href="<?php echo esc_url(add_query_arg(array('page' => 'wishlist-add-new', 'item' => $item->id), admin_url('admin.php'))); ?>" class="page-title-action">
+	<a href="<?php echo esc_url(add_query_arg(array('page' => 'wishlist', 'action' => 'edit', 'item' => $item->id), admin_url('admin.php'))); ?>" class="page-title-action">
 		<?php _e('Edit Item', 'personal-wishlist-manager'); ?>
 	</a>
 	<a href="<?php echo esc_url(add_query_arg('page', 'wishlist', admin_url('admin.php'))); ?>" class="page-title-action">
@@ -54,17 +53,6 @@ $item_tags = pwm_parse_tags($item->tags);
 						<span class="pwm-category-badge"><?php echo esc_html($item->category); ?></span>
 					</span>
 				</div>
-
-				<?php if (!empty($item_tags)) : ?>
-				<div class="pwm-detail-row">
-					<span class="pwm-detail-label"><?php _e('Tags:', 'personal-wishlist-manager'); ?></span>
-					<span class="pwm-detail-value">
-						<?php foreach ($item_tags as $tag) : ?>
-							<span class="pwm-tag-badge"><?php echo esc_html($tag); ?></span>
-						<?php endforeach; ?>
-					</span>
-				</div>
-				<?php endif; ?>
 
 				<div class="pwm-detail-row">
 					<span class="pwm-detail-label"><?php _e('Product URL:', 'personal-wishlist-manager'); ?></span>
@@ -97,7 +85,7 @@ $item_tags = pwm_parse_tags($item->tags);
 			</div>
 
 			<div class="pwm-item-actions">
-				<a href="<?php echo esc_url(add_query_arg(array('page' => 'wishlist-add-new', 'item' => $item->id), admin_url('admin.php'))); ?>" class="button button-primary button-large">
+				<a href="<?php echo esc_url(add_query_arg(array('page' => 'wishlist', 'action' => 'edit', 'item' => $item->id), admin_url('admin.php'))); ?>" class="button button-primary button-large">
 					<span class="dashicons dashicons-edit"></span>
 					<?php _e('Edit Item', 'personal-wishlist-manager'); ?>
 				</a>

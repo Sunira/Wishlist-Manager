@@ -59,7 +59,6 @@ class PWM_Shortcode {
 			'show_filters' => 'true',
 			'show_search' => 'true',
 			'show_category' => 'true',
-			'show_tags' => 'true',
 			'show_price' => 'true',
 			'show_sort' => 'true'
 		), $atts, 'personal_wishlist');
@@ -78,7 +77,6 @@ class PWM_Shortcode {
 		$show_filters = filter_var($atts['show_filters'], FILTER_VALIDATE_BOOLEAN);
 		$show_search = filter_var($atts['show_search'], FILTER_VALIDATE_BOOLEAN);
 		$show_category = filter_var($atts['show_category'], FILTER_VALIDATE_BOOLEAN);
-		$show_tags = filter_var($atts['show_tags'], FILTER_VALIDATE_BOOLEAN);
 		$show_price = filter_var($atts['show_price'], FILTER_VALIDATE_BOOLEAN);
 		$show_sort = filter_var($atts['show_sort'], FILTER_VALIDATE_BOOLEAN);
 
@@ -87,7 +85,6 @@ class PWM_Shortcode {
 			'show_filters' => $show_filters,
 			'show_search' => $show_search,
 			'show_category' => $show_category,
-			'show_tags' => $show_tags,
 			'show_price' => $show_price,
 			'show_sort' => $show_sort
 		);

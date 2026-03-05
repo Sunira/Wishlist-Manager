@@ -35,7 +35,7 @@ if (!defined('ABSPATH')) {
 		<div class="wishlist-empty-state">
 			<p><?php _e('Your wishlist is empty.', 'personal-wishlist-manager'); ?></p>
 			<?php if (current_user_can('manage_wishlist_items')) : ?>
-				<a href="<?php echo esc_url(admin_url('admin.php?page=wishlist-add-new')); ?>" class="button button-primary">
+				<a href="<?php echo esc_url(add_query_arg(array('page' => 'wishlist', 'action' => 'add'), admin_url('admin.php'))); ?>" class="button button-primary">
 					<?php _e('Add your first item!', 'personal-wishlist-manager'); ?>
 				</a>
 			<?php endif; ?>

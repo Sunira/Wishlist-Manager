@@ -77,7 +77,7 @@ class PWM_Admin {
 			__('Add New', 'personal-wishlist-manager'),
 			'manage_wishlist_items',
 			'wishlist-add-new',
-			array($this, 'display_item_form_page')
+			array($this, 'display_items_list_page')
 		);
 
 		// Categories submenu
@@ -88,16 +88,6 @@ class PWM_Admin {
 			'manage_wishlist_items',
 			'wishlist-categories',
 			array($this, 'display_categories_page')
-		);
-
-		// Tags submenu
-		add_submenu_page(
-			'wishlist',
-			__('Tags', 'personal-wishlist-manager'),
-			__('Tags', 'personal-wishlist-manager'),
-			'manage_wishlist_items',
-			'wishlist-tags',
-			array($this, 'display_tags_page')
 		);
 
 		// Settings submenu
@@ -214,7 +204,6 @@ class PWM_Admin {
 			$data = array(
 				'title' => isset($_POST['title']) ? $_POST['title'] : '',
 				'category' => isset($_POST['category']) ? $_POST['category'] : '',
-				'tags' => isset($_POST['tags']) ? $_POST['tags'] : '',
 				'image_url' => isset($_POST['image_url']) ? $_POST['image_url'] : '',
 				'product_url' => isset($_POST['product_url']) ? $_POST['product_url'] : '',
 				'price' => isset($_POST['price']) ? $_POST['price'] : '',
@@ -322,8 +311,13 @@ class PWM_Admin {
 	 * Display items list page
 	 */
 	public function display_items_list_page() {
-		// Check if we should show item view instead
-		if (isset($_GET['action']) && $_GET['action'] === 'view' && isset($_GET['item'])) {
+		$action = isset($_GET['action']) ? sanitize_text_field(wp_unslash($_GET['action'])) : '';
+		$page = isset($_GET['page']) ? sanitize_text_field(wp_unslash($_GET['page'])) : 'wishlist';
+
+		// Support both the canonical wishlist actions and the legacy submenu slug.
+		if ($page === 'wishlist-add-new' || $action === 'add' || $action === 'edit') {
+			require_once PWM_PLUGIN_DIR . 'admin/views/item-form.php';
+		} elseif ($action === 'view' && isset($_GET['item'])) {
 			require_once PWM_PLUGIN_DIR . 'admin/views/item-view.php';
 		} else {
 			require_once PWM_PLUGIN_DIR . 'admin/views/items-list.php';
@@ -342,13 +336,6 @@ class PWM_Admin {
 	 */
 	public function display_categories_page() {
 		require_once PWM_PLUGIN_DIR . 'admin/views/categories.php';
-	}
-
-	/**
-	 * Display tags page
-	 */
-	public function display_tags_page() {
-		require_once PWM_PLUGIN_DIR . 'admin/views/tags.php';
 	}
 
 	/**

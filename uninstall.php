@@ -30,6 +30,7 @@ if ($delete_data) {
 	delete_option('pwm_custom_css');
 	delete_option('pwm_enable_ajax');
 	delete_option('pwm_delete_on_uninstall');
+	delete_option('pwm_quick_add_token');
 
 	// Delete transients
 	delete_transient('pwm_activation_notice');

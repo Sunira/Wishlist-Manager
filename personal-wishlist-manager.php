@@ -125,7 +125,8 @@ class Personal_Wishlist_Manager {
 			'pwm_currency_position' => 'before',
 			'pwm_enable_ajax' => true,
 			'pwm_delete_on_uninstall' => false,
-			'pwm_custom_css' => ''
+			'pwm_custom_css' => '',
+			'pwm_quick_add_token' => wp_generate_password(40, false, false)
 		);
 
 		foreach ($defaults as $key => $value) {

@@ -47,6 +47,33 @@ class PWM_Database {
 	private function __construct() {
 		global $wpdb;
 		$this->table_name = $wpdb->prefix . 'wishlist_items';
+		$this->maybe_migrate_schema();
+	}
+
+	/**
+	 * Remove legacy schema columns no longer used by the plugin.
+	 */
+	private function maybe_migrate_schema() {
+		global $wpdb;
+
+		$table_exists = $wpdb->get_var(
+			$wpdb->prepare('SHOW TABLES LIKE %s', $this->table_name)
+		);
+
+		if ($table_exists !== $this->table_name) {
+			return;
+		}
+
+		$has_tags_column = $wpdb->get_var(
+			$wpdb->prepare(
+				"SHOW COLUMNS FROM {$this->table_name} LIKE %s",
+				'tags'
+			)
+		);
+
+		if (!empty($has_tags_column)) {
+			$wpdb->query("ALTER TABLE {$this->table_name} DROP COLUMN tags");
+		}
 	}
 
 	/**
@@ -71,7 +98,6 @@ class PWM_Database {
 			id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
 			title VARCHAR(255) NOT NULL,
 			category VARCHAR(100) NOT NULL,
-			tags TEXT,
 			image_url TEXT NOT NULL,
 			product_url TEXT NOT NULL,
 			price DECIMAL(10,2) NOT NULL,
@@ -104,14 +130,13 @@ class PWM_Database {
 			array(
 				'title' => $data['title'],
 				'category' => $data['category'],
-				'tags' => isset($data['tags']) ? $data['tags'] : '',
 				'image_url' => $data['image_url'],
 				'product_url' => $data['product_url'],
 				'price' => $data['price'],
 				'reason' => isset($data['reason']) ? $data['reason'] : '',
 				'user_id' => isset($data['user_id']) ? $data['user_id'] : get_current_user_id()
 			),
-			array('%s', '%s', '%s', '%s', '%s', '%f', '%s', '%d')
+			array('%s', '%s', '%s', '%s', '%f', '%s', '%d')
 		);
 
 		if ($result === false) {
@@ -136,14 +161,13 @@ class PWM_Database {
 			array(
 				'title' => $data['title'],
 				'category' => $data['category'],
-				'tags' => isset($data['tags']) ? $data['tags'] : '',
 				'image_url' => $data['image_url'],
 				'product_url' => $data['product_url'],
 				'price' => $data['price'],
 				'reason' => isset($data['reason']) ? $data['reason'] : ''
 			),
 			array('id' => $item_id),
-			array('%s', '%s', '%s', '%s', '%s', '%f', '%s'),
+			array('%s', '%s', '%s', '%s', '%f', '%s'),
 			array('%d')
 		);
 
@@ -198,7 +222,6 @@ class PWM_Database {
 			'search' => '',
 			'category' => '',
 			'categories' => array(),
-			'tags' => array(),
 			'min_price' => 0,
 			'max_price' => 999999,
 			'user_id' => 0,
@@ -233,18 +256,6 @@ class PWM_Database {
 			$category_placeholders = implode(',', array_fill(0, count($args['categories']), '%s'));
 			$where[] = "category IN ($category_placeholders)";
 			$prepare_values = array_merge($prepare_values, $args['categories']);
-		}
-
-		// Tags filter
-		if (!empty($args['tags']) && is_array($args['tags'])) {
-			$tag_conditions = array();
-			foreach ($args['tags'] as $tag) {
-				$tag_conditions[] = 'tags LIKE %s';
-				$prepare_values[] = '%' . $wpdb->esc_like($tag) . '%';
-			}
-			if (!empty($tag_conditions)) {
-				$where[] = '(' . implode(' OR ', $tag_conditions) . ')';
-			}
 		}
 
 		// Price range
@@ -305,7 +316,6 @@ class PWM_Database {
 			'search' => '',
 			'category' => '',
 			'categories' => array(),
-			'tags' => array(),
 			'min_price' => 0,
 			'max_price' => 999999,
 			'user_id' => 0
@@ -336,18 +346,6 @@ class PWM_Database {
 			$category_placeholders = implode(',', array_fill(0, count($args['categories']), '%s'));
 			$where[] = "category IN ($category_placeholders)";
 			$prepare_values = array_merge($prepare_values, $args['categories']);
-		}
-
-		// Tags
-		if (!empty($args['tags']) && is_array($args['tags'])) {
-			$tag_conditions = array();
-			foreach ($args['tags'] as $tag) {
-				$tag_conditions[] = 'tags LIKE %s';
-				$prepare_values[] = '%' . $wpdb->esc_like($tag) . '%';
-			}
-			if (!empty($tag_conditions)) {
-				$where[] = '(' . implode(' OR ', $tag_conditions) . ')';
-			}
 		}
 
 		// Price range
@@ -389,32 +387,6 @@ class PWM_Database {
 		);
 
 		return $results;
-	}
-
-	/**
-	 * Get all unique tags
-	 *
-	 * @return array Array of tags with counts
-	 */
-	public function get_tags() {
-		global $wpdb;
-
-		$results = $wpdb->get_col("SELECT tags FROM {$this->table_name} WHERE tags != ''");
-
-		$tags = array();
-		foreach ($results as $tag_string) {
-			$item_tags = array_map('trim', explode(',', $tag_string));
-			foreach ($item_tags as $tag) {
-				if (!empty($tag)) {
-					if (!isset($tags[$tag])) {
-						$tags[$tag] = 0;
-					}
-					$tags[$tag]++;
-				}
-			}
-		}
-
-		return $tags;
 	}
 
 	/**

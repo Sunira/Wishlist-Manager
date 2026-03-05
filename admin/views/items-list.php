@@ -42,7 +42,6 @@ class PWM_Items_List_Table extends WP_List_Table {
 			'image' => __('Image', 'personal-wishlist-manager'),
 			'title' => __('Title', 'personal-wishlist-manager'),
 			'category' => __('Category', 'personal-wishlist-manager'),
-			'tags' => __('Tags', 'personal-wishlist-manager'),
 			'price' => __('Price', 'personal-wishlist-manager'),
 			'created_at' => __('Date Added', 'personal-wishlist-manager')
 		);
@@ -90,16 +89,6 @@ class PWM_Items_List_Table extends WP_List_Table {
 				);
 			case 'category':
 				return '<span class="pwm-category-badge">' . esc_html($item->category) . '</span>';
-			case 'tags':
-				$tags = pwm_parse_tags($item->tags);
-				if (empty($tags)) {
-					return '—';
-				}
-				$output = '';
-				foreach ($tags as $tag) {
-					$output .= '<span class="pwm-tag-badge">' . esc_html($tag) . '</span> ';
-				}
-				return $output;
 			case 'price':
 				return '<strong>' . pwm_format_price($item->price) . '</strong>';
 			case 'created_at':
@@ -127,7 +116,7 @@ class PWM_Items_List_Table extends WP_List_Table {
 	 */
 	public function column_title($item) {
 		$edit_url = add_query_arg(
-			array('page' => 'wishlist-add-new', 'item' => $item->id),
+			array('page' => 'wishlist', 'action' => 'edit', 'item' => $item->id),
 			admin_url('admin.php')
 		);
 
@@ -217,7 +206,10 @@ class PWM_Items_List_Table extends WP_List_Table {
 	 * Display when no items found
 	 */
 	public function no_items() {
-		$add_new_url = add_query_arg('page', 'wishlist-add-new', admin_url('admin.php'));
+		$add_new_url = add_query_arg(
+			array('page' => 'wishlist', 'action' => 'add'),
+			admin_url('admin.php')
+		);
 		printf(
 			__('No wishlist items found. <a href="%s">Add your first item!</a>', 'personal-wishlist-manager'),
 			esc_url($add_new_url)
@@ -250,7 +242,7 @@ $list_table->prepare_items();
 
 <div class="wrap">
 	<h1 class="wp-heading-inline"><?php _e('Wishlist Items', 'personal-wishlist-manager'); ?></h1>
-	<a href="<?php echo esc_url(add_query_arg('page', 'wishlist-add-new', admin_url('admin.php'))); ?>" class="page-title-action">
+	<a href="<?php echo esc_url(add_query_arg(array('page' => 'wishlist', 'action' => 'add'), admin_url('admin.php'))); ?>" class="page-title-action">
 		<?php _e('Add New', 'personal-wishlist-manager'); ?>
 	</a>
 	<hr class="wp-header-end">
