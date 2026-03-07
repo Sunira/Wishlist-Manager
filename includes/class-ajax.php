@@ -161,7 +161,7 @@ class PWM_Ajax {
 		$category = isset($_POST['category']) ? sanitize_text_field($_POST['category']) : '';
 		$min_price = isset($_POST['min_price']) ? floatval($_POST['min_price']) : 0;
 		$max_price = isset($_POST['max_price']) ? floatval($_POST['max_price']) : 999999;
-		$sort = isset($_POST['sort']) ? sanitize_text_field($_POST['sort']) : 'alphabetical';
+		$sort = isset($_POST['sort']) ? sanitize_text_field($_POST['sort']) : get_option('pwm_default_sort', 'date_desc');
 		$columns = isset($_POST['columns']) ? intval($_POST['columns']) : 3;
 
 		// Get sort parameters
@@ -246,6 +246,9 @@ class PWM_Ajax {
 				'reason' => isset($_POST['reason']) ? wp_kses_post(wp_unslash($_POST['reason'])) : '',
 				'user_id' => get_current_user_id() > 0 ? get_current_user_id() : 1
 			);
+			$image_candidates = $this->parse_image_candidates(
+				isset($_POST['image_candidates']) ? wp_unslash($_POST['image_candidates']) : ''
+			);
 
 			if (empty($item_data['image_url'])) {
 				$item_data['image_url'] = PWM_PLUGIN_URL . 'public/images/quick-add-placeholder.svg';
@@ -259,8 +262,32 @@ class PWM_Ajax {
 				);
 			}
 
-			$errors = pwm_validate_item_data($item_data);
+			$errors = array();
+			$allowed_categories = pwm_get_wordpress_category_names();
+			if (!empty($allowed_categories) && !in_array($item_data['category'], $allowed_categories, true)) {
+				$errors[] = __('Please choose a valid WordPress category.', 'personal-wishlist-manager');
+			}
+
+			if (
+				!empty($item_data['image_url']) &&
+				!$this->is_local_media_url($item_data['image_url'])
+			) {
+				$sideload_result = $this->sideload_quick_add_image($item_data['image_url'], $item_data['title']);
+
+				if (is_wp_error($sideload_result)) {
+					$errors[] = sprintf(
+						/* translators: %s: error message */
+						__('Unable to import image into Media Library: %s', 'personal-wishlist-manager'),
+						$sideload_result->get_error_message()
+					);
+				} else {
+					$item_data['image_url'] = $sideload_result;
+				}
+			}
+
+			$errors = array_merge($errors, pwm_validate_item_data($item_data));
 			if (!empty($errors)) {
+				$item_data['image_candidates'] = $image_candidates;
 				$this->render_quick_add_form($token, $item_data, $errors);
 				return;
 			}
@@ -308,9 +335,16 @@ class PWM_Ajax {
 			$title = !empty($host) ? $host : __('Quick Add Item', 'personal-wishlist-manager');
 		}
 
+		$image_candidates = $this->sanitize_image_candidates(
+			isset($decoded_data['image_candidates']) ? $decoded_data['image_candidates'] : array()
+		);
 		$image_url = isset($decoded_data['image_url']) ? esc_url_raw($decoded_data['image_url']) : '';
 		if (empty($image_url)) {
-			$image_url = PWM_PLUGIN_URL . 'public/images/quick-add-placeholder.svg';
+			$image_url = !empty($image_candidates) ? $image_candidates[0] : PWM_PLUGIN_URL . 'public/images/quick-add-placeholder.svg';
+		}
+		if (!empty($image_url) && !in_array($image_url, $image_candidates, true)) {
+			array_unshift($image_candidates, $image_url);
+			$image_candidates = $this->sanitize_image_candidates($image_candidates);
 		}
 
 		$raw_price = isset($decoded_data['price']) ? wp_strip_all_tags((string) $decoded_data['price']) : '';
@@ -322,8 +356,9 @@ class PWM_Ajax {
 
 		$form_data = array(
 			'title' => $title,
-			'category' => __('Quick Add', 'personal-wishlist-manager'),
+			'category' => '',
 			'image_url' => $image_url,
+			'image_candidates' => $image_candidates,
 			'product_url' => $product_url,
 			'price' => $price,
 			'reason' => sprintf(
@@ -332,6 +367,13 @@ class PWM_Ajax {
 				current_time('Y-m-d H:i')
 			)
 		);
+
+		$wp_categories = pwm_get_wordpress_category_names();
+		if (!empty($wp_categories)) {
+			$form_data['category'] = $wp_categories[0];
+		} else {
+			$form_data['category'] = __('Uncategorized', 'personal-wishlist-manager');
+		}
 
 		$this->render_quick_add_form($token, $form_data);
 	}
@@ -345,6 +387,15 @@ class PWM_Ajax {
 	 */
 	private function render_quick_add_form($token, $data, $errors = array()) {
 		$form_action = admin_url('admin-post.php');
+		$wp_categories = pwm_get_wordpress_category_names();
+		$selected_image = isset($data['image_url']) ? esc_url_raw($data['image_url']) : '';
+		$image_candidates = $this->sanitize_image_candidates(
+			isset($data['image_candidates']) ? $data['image_candidates'] : array()
+		);
+		if (!empty($selected_image) && !in_array($selected_image, $image_candidates, true)) {
+			array_unshift($image_candidates, $selected_image);
+			$image_candidates = $this->sanitize_image_candidates($image_candidates);
+		}
 		?>
 		<!doctype html>
 		<html <?php language_attributes(); ?>>
@@ -361,13 +412,18 @@ class PWM_Ajax {
 				.pwm-errors ul { margin:0; padding-left:20px; }
 				.pwm-row { margin-bottom:14px; }
 				label { display:block; font-weight:600; margin-bottom:6px; }
-				input[type="text"], input[type="url"], input[type="number"], textarea { width:100%; border:1px solid #d1d5db; border-radius:8px; padding:10px 12px; font-size:15px; box-sizing:border-box; }
+				input[type="text"], input[type="url"], input[type="number"], select, textarea { width:100%; border:1px solid #d1d5db; border-radius:8px; padding:10px 12px; font-size:15px; box-sizing:border-box; background:#fff; }
 				textarea { min-height:100px; resize:vertical; }
 				.pwm-actions { display:flex; gap:10px; margin-top:18px; }
 				.pwm-btn { border:none; border-radius:8px; padding:11px 16px; font-weight:600; cursor:pointer; }
 				.pwm-btn-primary { background:#2563eb; color:#fff; }
 				.pwm-btn-secondary { background:#e5e7eb; color:#111827; text-decoration:none; display:inline-flex; align-items:center; }
 				.pwm-preview { width:100%; max-height:240px; object-fit:contain; border:1px solid #e5e7eb; border-radius:8px; background:#f9fafb; }
+				.pwm-image-picker { display:grid; grid-template-columns:repeat(auto-fill,minmax(88px,1fr)); gap:8px; margin-top:10px; }
+				.pwm-image-choice { border:2px solid #d1d5db; border-radius:8px; padding:0; background:#fff; cursor:pointer; overflow:hidden; }
+				.pwm-image-choice img { display:block; width:100%; aspect-ratio:1/1; object-fit:cover; }
+				.pwm-image-choice.is-selected { border-color:#2563eb; box-shadow:0 0 0 1px #2563eb inset; }
+				.pwm-image-help { margin:6px 0 0; font-size:13px; color:#6b7280; }
 			</style>
 		</head>
 		<body>
@@ -388,6 +444,7 @@ class PWM_Ajax {
 				<form method="post" action="<?php echo esc_url($form_action); ?>">
 					<input type="hidden" name="action" value="pwm_quick_add">
 					<input type="hidden" name="token" value="<?php echo esc_attr($token); ?>">
+					<input type="hidden" name="image_candidates" value="<?php echo esc_attr(wp_json_encode($image_candidates)); ?>">
 					<?php wp_nonce_field('pwm_quick_add_submit', 'pwm_quick_add_nonce'); ?>
 
 					<div class="pwm-row">
@@ -396,7 +453,17 @@ class PWM_Ajax {
 					</div>
 					<div class="pwm-row">
 						<label for="pwm-qa-category"><?php esc_html_e('Category', 'personal-wishlist-manager'); ?></label>
-						<input id="pwm-qa-category" type="text" name="category" value="<?php echo esc_attr($data['category']); ?>" required>
+						<select id="pwm-qa-category" name="category" required>
+							<?php if (empty($wp_categories)) : ?>
+								<option value="<?php echo esc_attr($data['category']); ?>"><?php echo esc_html($data['category']); ?></option>
+							<?php else : ?>
+								<?php foreach ($wp_categories as $category_name) : ?>
+									<option value="<?php echo esc_attr($category_name); ?>" <?php selected($data['category'], $category_name); ?>>
+										<?php echo esc_html($category_name); ?>
+									</option>
+								<?php endforeach; ?>
+							<?php endif; ?>
+						</select>
 					</div>
 					<div class="pwm-row">
 						<label for="pwm-qa-product-url"><?php esc_html_e('Product URL', 'personal-wishlist-manager'); ?></label>
@@ -404,10 +471,23 @@ class PWM_Ajax {
 					</div>
 					<div class="pwm-row">
 						<label for="pwm-qa-image-url"><?php esc_html_e('Image URL', 'personal-wishlist-manager'); ?></label>
-						<input id="pwm-qa-image-url" type="url" name="image_url" value="<?php echo esc_url($data['image_url']); ?>">
+						<input id="pwm-qa-image-url" type="url" name="image_url" value="<?php echo esc_url($selected_image); ?>">
+						<?php if (!empty($image_candidates)) : ?>
+							<div class="pwm-image-picker" id="pwm-image-picker">
+								<?php foreach ($image_candidates as $candidate_url) : ?>
+									<button type="button"
+										class="pwm-image-choice <?php echo $candidate_url === $selected_image ? 'is-selected' : ''; ?>"
+										data-image-url="<?php echo esc_url($candidate_url); ?>"
+										aria-label="<?php esc_attr_e('Use this image', 'personal-wishlist-manager'); ?>">
+										<img src="<?php echo esc_url($candidate_url); ?>" alt="">
+									</button>
+								<?php endforeach; ?>
+							</div>
+							<p class="pwm-image-help"><?php esc_html_e('Pick one of the detected images, or paste a different image URL.', 'personal-wishlist-manager'); ?></p>
+						<?php endif; ?>
 					</div>
 					<div class="pwm-row">
-						<img class="pwm-preview" src="<?php echo esc_url($data['image_url']); ?>" alt="">
+						<img class="pwm-preview" id="pwm-qa-preview" src="<?php echo esc_url($selected_image); ?>" alt="">
 					</div>
 					<div class="pwm-row">
 						<label for="pwm-qa-price"><?php esc_html_e('Price', 'personal-wishlist-manager'); ?></label>
@@ -424,9 +504,176 @@ class PWM_Ajax {
 					</div>
 				</form>
 			</div>
+			<script>
+				(function () {
+					var picker = document.getElementById('pwm-image-picker');
+					var imageInput = document.getElementById('pwm-qa-image-url');
+					var preview = document.getElementById('pwm-qa-preview');
+					if (!imageInput || !preview) {
+						return;
+					}
+
+					function updateSelection(selectedUrl) {
+						if (!picker) {
+							return;
+						}
+
+						var buttons = picker.querySelectorAll('.pwm-image-choice');
+						for (var i = 0; i < buttons.length; i++) {
+							var btn = buttons[i];
+							var url = btn.getAttribute('data-image-url') || '';
+							if (url === selectedUrl) {
+								btn.classList.add('is-selected');
+							} else {
+								btn.classList.remove('is-selected');
+							}
+						}
+					}
+
+					if (picker) {
+						picker.addEventListener('click', function (event) {
+							var button = event.target.closest('.pwm-image-choice');
+							if (!button) {
+								return;
+							}
+
+							event.preventDefault();
+							var url = button.getAttribute('data-image-url') || '';
+							if (!url) {
+								return;
+							}
+
+							imageInput.value = url;
+							preview.src = url;
+							updateSelection(url);
+						});
+					}
+
+					imageInput.addEventListener('input', function () {
+						var url = imageInput.value.trim();
+						if (url) {
+							preview.src = url;
+						}
+						updateSelection(url);
+					});
+				})();
+			</script>
 		</body>
 		</html>
 		<?php
 		exit;
+	}
+
+	/**
+	 * Parse and sanitize serialized image candidates.
+	 *
+	 * @param string $raw_json JSON-encoded candidate URL array.
+	 * @return array
+	 */
+	private function parse_image_candidates($raw_json) {
+		if (!is_string($raw_json) || $raw_json === '') {
+			return array();
+		}
+
+		$decoded = json_decode($raw_json, true);
+		if (!is_array($decoded)) {
+			return array();
+		}
+
+		return $this->sanitize_image_candidates($decoded);
+	}
+
+	/**
+	 * Sanitize candidate image URLs.
+	 *
+	 * @param array $candidates Candidate URL list.
+	 * @return array
+	 */
+	private function sanitize_image_candidates($candidates) {
+		if (!is_array($candidates)) {
+			return array();
+		}
+
+		$clean = array();
+		foreach ($candidates as $candidate) {
+			$url = esc_url_raw((string) $candidate);
+			if (empty($url)) {
+				continue;
+			}
+			if (!filter_var($url, FILTER_VALIDATE_URL)) {
+				continue;
+			}
+			if (in_array($url, $clean, true)) {
+				continue;
+			}
+
+			$clean[] = $url;
+			if (count($clean) >= 12) {
+				break;
+			}
+		}
+
+		return $clean;
+	}
+
+	/**
+	 * Check whether URL is already a local media-library URL.
+	 *
+	 * @param string $url URL to inspect.
+	 * @return bool
+	 */
+	private function is_local_media_url($url) {
+		$uploads = wp_get_upload_dir();
+		if (empty($uploads['baseurl'])) {
+			return false;
+		}
+
+		return strpos($url, $uploads['baseurl']) === 0;
+	}
+
+	/**
+	 * Download a remote image and save it to the WordPress Media Library.
+	 *
+	 * @param string $image_url Remote image URL.
+	 * @param string $title     Optional title for attachment context.
+	 * @return string|WP_Error Local media URL on success.
+	 */
+	private function sideload_quick_add_image($image_url, $title = '') {
+		if (!filter_var($image_url, FILTER_VALIDATE_URL)) {
+			return new WP_Error('pwm_invalid_image_url', __('Invalid image URL.', 'personal-wishlist-manager'));
+		}
+
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+		require_once ABSPATH . 'wp-admin/includes/media.php';
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+
+		$temp_file = download_url($image_url, 20);
+		if (is_wp_error($temp_file)) {
+			return $temp_file;
+		}
+
+		$path = wp_parse_url($image_url, PHP_URL_PATH);
+		$filename = wp_basename($path);
+		if (empty($filename) || strpos($filename, '.') === false) {
+			$filename = 'quick-add-image.jpg';
+		}
+
+		$file_array = array(
+			'name' => sanitize_file_name($filename),
+			'tmp_name' => $temp_file,
+		);
+
+		$attachment_id = media_handle_sideload($file_array, 0, $title);
+		if (is_wp_error($attachment_id)) {
+			@unlink($temp_file);
+			return $attachment_id;
+		}
+
+		$attachment_url = wp_get_attachment_url($attachment_id);
+		if (empty($attachment_url)) {
+			return new WP_Error('pwm_attachment_url_missing', __('Could not resolve uploaded image URL.', 'personal-wishlist-manager'));
+		}
+
+		return $attachment_url;
 	}
 }

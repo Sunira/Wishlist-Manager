@@ -59,7 +59,7 @@ class PWM_Blocks {
 				),
 				'sort' => array(
 					'type' => 'string',
-					'default' => get_option('pwm_default_sort', 'alphabetical')
+					'default' => get_option('pwm_default_sort', 'date_desc')
 				),
 				'limit' => array(
 					'type' => 'number',
@@ -82,6 +82,13 @@ class PWM_Blocks {
 	 * Enqueue block editor assets
 	 */
 	public function enqueue_block_editor_assets() {
+		wp_enqueue_style(
+			'pwm-frontend-styles',
+			PWM_PLUGIN_URL . 'public/css/frontend-styles.css',
+			array(),
+			PWM_VERSION
+		);
+
 		// Enqueue block JavaScript
 		wp_enqueue_script(
 			'pwm-wishlist-block',
@@ -161,7 +168,7 @@ class PWM_Blocks {
 		$attributes = wp_parse_args($attributes, array(
 			'categories' => array(),
 			'columns' => get_option('pwm_default_columns', 3),
-			'sort' => get_option('pwm_default_sort', 'alphabetical'),
+			'sort' => get_option('pwm_default_sort', 'date_desc'),
 			'limit' => -1,
 			'showFilters' => get_option('pwm_show_filters', true),
 			'userId' => 0
@@ -173,7 +180,8 @@ class PWM_Blocks {
 			'sort' => sanitize_text_field($attributes['sort']),
 			'limit' => intval($attributes['limit']),
 			'show_filters' => $attributes['showFilters'] ? 'true' : 'false',
-			'user_id' => intval($attributes['userId'])
+			'user_id' => intval($attributes['userId']),
+			'preview_mode' => (defined('REST_REQUEST') && REST_REQUEST) ? 'true' : 'false'
 		);
 
 		// Handle categories (convert array to proper format)

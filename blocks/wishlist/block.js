@@ -44,7 +44,7 @@
 			},
 			sort: {
 				type: 'string',
-				default: 'alphabetical'
+				default: 'date_desc'
 			},
 			limit: {
 				type: 'number',
@@ -187,10 +187,15 @@
 			);
 
 			// Build block preview using ServerSideRender
-			var blockPreview = el(ServerSideRender, {
-				block: 'personal-wishlist-manager/wishlist',
-				attributes: attributes,
-				EmptyResponsePlaceholder: function() {
+			var blockPreview = el('div', { className: 'pwm-block-preview-shell' },
+				el('div', { className: 'pwm-block-preview-toolbar' },
+					el('strong', {}, 'Live preview'),
+					el('span', {}, 'Updates as you change the block settings.')
+				),
+				el(ServerSideRender, {
+					block: 'personal-wishlist-manager/wishlist',
+					attributes: attributes,
+					EmptyResponsePlaceholder: function() {
 					return el('div', {
 						className: 'pwm-block-placeholder',
 						style: {
@@ -217,8 +222,8 @@
 							}
 						}, 'No wishlist items match your selection.')
 					);
-				},
-				ErrorResponsePlaceholder: function() {
+					},
+					ErrorResponsePlaceholder: function() {
 					return el('div', {
 						className: 'pwm-block-error',
 						style: {
@@ -245,8 +250,8 @@
 							}
 						}, 'Error loading wishlist. Please check your settings.')
 					);
-				},
-				LoadingResponsePlaceholder: function() {
+					},
+					LoadingResponsePlaceholder: function() {
 					return el('div', {
 						className: 'pwm-block-loading',
 						style: {
@@ -264,8 +269,9 @@
 							}
 						})
 					);
-				}
-			});
+					}
+				})
+			);
 
 			// Return the complete editor UI
 			return el(Fragment, {},

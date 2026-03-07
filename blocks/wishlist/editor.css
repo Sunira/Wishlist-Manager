@@ -9,6 +9,26 @@
 	margin: 20px 0;
 }
 
+.wp-block-personal-wishlist-manager-wishlist .pwm-block-preview-shell {
+	border: 1px solid #d0d7de;
+	border-radius: 14px;
+	overflow: hidden;
+	background: #fff;
+	box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.wp-block-personal-wishlist-manager-wishlist .pwm-block-preview-toolbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 12px;
+	padding: 12px 16px;
+	background: linear-gradient(90deg, #eef6ff 0%, #f8fbff 100%);
+	border-bottom: 1px solid #dbe7f3;
+	font-size: 13px;
+	color: #44576b;
+}
+
 /* Block placeholder state */
 .pwm-block-placeholder {
 	display: flex;
@@ -77,6 +97,10 @@
 	border-radius: 4px;
 }
 
+.wp-block-personal-wishlist-manager-wishlist .personal-wishlist-container.pwm-editor-preview {
+	padding: 18px;
+}
+
 /* Preview grid in editor */
 .wp-block-personal-wishlist-manager-wishlist .personal-wishlist-grid {
 	margin-top: 0;
@@ -91,6 +115,18 @@
 .wp-block-personal-wishlist-manager-wishlist .wishlist-card {
 	cursor: default;
 	pointer-events: none;
+}
+
+.wp-block-personal-wishlist-manager-wishlist .wishlist-filters input,
+.wp-block-personal-wishlist-manager-wishlist .wishlist-filters select,
+.wp-block-personal-wishlist-manager-wishlist .wishlist-filters button,
+.wp-block-personal-wishlist-manager-wishlist .wishlist-empty-state a,
+.wp-block-personal-wishlist-manager-wishlist .wishlist-card-button {
+	pointer-events: none;
+}
+
+.wp-block-personal-wishlist-manager-wishlist .wishlist-filters {
+	opacity: 0.96;
 }
 
 /* Responsive adjustments in editor */

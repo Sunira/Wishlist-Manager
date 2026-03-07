@@ -117,6 +117,33 @@ function pwm_get_categories() {
 }
 
 /**
+ * Get WordPress post category names for select controls.
+ *
+ * @return array
+ */
+function pwm_get_wordpress_category_names() {
+	$terms = get_terms(
+		array(
+			'taxonomy' => 'category',
+			'hide_empty' => false,
+			'orderby' => 'name',
+			'order' => 'ASC',
+			'fields' => 'names',
+		)
+	);
+
+	if (is_wp_error($terms) || !is_array($terms)) {
+		return array();
+	}
+
+	$names = array_map('sanitize_text_field', $terms);
+	$names = array_filter($names);
+	$names = array_values(array_unique($names));
+
+	return $names;
+}
+
+/**
  * Get admin page URL
  *
  * @param string $page Page slug
@@ -239,6 +266,7 @@ function pwm_get_quick_add_bookmarklet() {
 	);
 
 	$base_url_js = wp_json_encode($base_url);
+	$script = "(function(){function getPrice(){var m=document.querySelector('meta[property=\"product:price:amount\"],meta[property=\"og:price:amount\"],meta[name=\"price\"],meta[itemprop=\"price\"]');if(m&&m.content){return m.content;}var t=document.body?document.body.innerText:'';var r=t.match(/(?:\\$|USD\\s?)(\\d{1,3}(?:,\\d{3})*(?:\\.\\d{1,2})?)/i);return r?r[1].replace(/,/g,''):'';}function addImage(list,url){if(!url||typeof url!=='string'){return;}var clean=url.trim();if(!/^https?:\\/\\//i.test(clean)){return;}if(list.indexOf(clean)===-1){list.push(clean);}}var images=[];var meta=document.querySelector('meta[property=\"og:image\"],meta[name=\"twitter:image\"],meta[property=\"twitter:image\"],link[rel=\"image_src\"]');if(meta){addImage(images,meta.content||meta.href||'');}var all=document.images||[];for(var i=0;i<all.length&&images.length<8;i++){var img=all[i];if(!img){continue;}var src=img.currentSrc||img.src||'';if(!src){continue;}if((img.naturalWidth||0)<220||(img.naturalHeight||0)<220){continue;}addImage(images,src);}var d={title:document.title||'',product_url:location.href||'',image_url:images[0]||'',image_candidates:images,price:getPrice()};var u=BASE_URL+'&data='+encodeURIComponent(JSON.stringify(d));window.open(u,'_blank','noopener');})();";
 
-	return "javascript:(function(){function g(){var m=document.querySelector('meta[property=\"product:price:amount\"],meta[property=\"og:price:amount\"],meta[name=\"price\"],meta[itemprop=\"price\"]');if(m&&m.content){return m.content;}var t=document.body?document.body.innerText:'';var r=t.match(/(?:\\$|USD\\s?)(\\d{1,3}(?:,\\d{3})*(?:\\.\\d{1,2})?)/i);return r?r[1].replace(/,/g,''):'';}var img=(document.querySelector('meta[property=\"og:image\"]')||{}).content||'';if(!img&&document.images){for(var i=0;i<document.images.length;i++){var c=document.images[i];if(c&&c.naturalWidth>=300&&c.naturalHeight>=300&&c.src){img=c.src;break;}}}var d={title:document.title||'',product_url:location.href||'',image_url:img||'',price:g()};var u=" . $base_url_js . "+'&data='+encodeURIComponent(JSON.stringify(d));window.open(u,'_blank','noopener');})();";
+	return 'javascript:' . str_replace('BASE_URL', $base_url_js, $script);
 }

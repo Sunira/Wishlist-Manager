@@ -3,31 +3,33 @@ Contributors: sunira
 Tags: wishlist, products, shopping, catalog, gift list
 Requires at least: 6.0
 Tested up to: 6.4
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-A personal wishlist manager with an admin dashboard, Gutenberg block support, shortcode support, and a responsive frontend display.
+A personal wishlist plugin with clean admin management, responsive frontend filters, shortcode/block support, and browser quick-add.
 
 == Description ==
 
-Personal Wishlist Manager lets you create and manage wishlist items from the WordPress admin area and display them on the frontend with either a shortcode or a Gutenberg block.
+Personal Wishlist Manager helps you run a single-user wishlist directly inside WordPress.
+
+Add and manage items in wp-admin, then display them on the frontend using either a shortcode or Gutenberg block.
 
 = Features =
 
-* **Admin Dashboard** - Manage wishlist items with list, add, edit, view, delete, and bulk delete screens
-* **Responsive Frontend Display** - Show items in a card grid with 1-4 columns
-* **Advanced Filtering** - Filter items by search term, category, tags, price range, and sort order
-* **Shortcode and Block Support** - Display the wishlist with a shortcode or Gutenberg block
-* **Rich Item Details** - Store title, image, product link, price, category, tags, and notes
-* **Tag Views and Category Overview** - Browse derived categories and tags in the admin
-* **AJAX Filtering** - Update frontend results without a full page reload
-* **Shortcode Generator** - Build customized shortcode output from the settings screen
-* **Export Tools** - Export wishlist data to CSV or JSON
-* **Custom Styling** - Add custom CSS from the plugin settings
-* **Selective Asset Loading** - Frontend assets load only when the shortcode or block is present
-* **Translation Ready** - Uses WordPress internationalization functions throughout
+* Admin dashboard: list, add, edit, view, delete, and bulk delete items
+* Frontend grid: responsive card layout with 1-4 columns
+* Frontend filters: search, category, price range, and sort order
+* Shortcode and block support for easy embedding
+* Rich item details: title, image URL, product URL, price, category, and description/reason
+* AJAX filtering for faster updates without full page refresh
+* Browser Quick Add bookmarklet with editable pre-save form
+* Shortcode generator in Settings
+* CSV and JSON export
+* Custom CSS support
+* Selective asset loading on pages that use the wishlist output
+* Translation-ready strings
 
 = Shortcode Usage =
 
@@ -47,13 +49,12 @@ Display your wishlist on any page or post using the `[personal_wishlist]` shortc
 * `columns` - Number of columns (1-4, default: 3)
 * `category` - Filter to specific category
 * `categories` - Filter to multiple categories
-* `sort` - Sort order (alphabetical, price_asc, price_desc, date_desc, default: alphabetical)
+* `sort` - Sort order (alphabetical, price_asc, price_desc, date_desc, default: date_desc)
 * `limit` - Maximum items to display (default: unlimited)
 * `user_id` - Show specific user's wishlist (default: all items)
 * `show_filters` - Show/hide the entire filter panel (true/false, default: true)
 * `show_search` - Show/hide the search field (true/false, default: true)
 * `show_category` - Show/hide the category filter (true/false, default: true)
-* `show_tags` - Show/hide the tags filter (true/false, default: true)
 * `show_price` - Show/hide the price range filter (true/false, default: true)
 * `show_sort` - Show/hide the sort dropdown (true/false, default: true)
 
@@ -83,6 +84,10 @@ Use the shortcode `[personal_wishlist]` on any page or post. You can customize t
 = Can I filter items by category? =
 
 Yes! You can use the `category` parameter in the shortcode, or enable the filter panel for visitors to filter items themselves.
+
+= Can I use a browser bookmarklet to add products quickly? =
+
+Yes. Go to Wishlist > Settings > Advanced and copy the Browser Quick Add bookmarklet. It opens a prefilled form where you can edit fields before saving.
 
 = Can I customize the appearance? =
 
@@ -121,27 +126,37 @@ No. The plugin only loads frontend assets on pages where the shortcode or block 
 1. Admin items list with search and bulk actions
 2. Add/Edit item form with media library integration
 3. Categories overview page
-4. Tags cloud and list view
-5. Settings page with multiple tabs
-6. Frontend wishlist grid display
-7. Filter panel with category, tag, and price filters
-8. Responsive mobile view
-9. Individual wishlist card with details
-10. Empty state when no items match filters
+4. Settings page with multiple tabs
+5. Frontend wishlist grid display
+6. Filter panel with category and price controls
+7. Responsive mobile view
+8. Individual wishlist card with details
+9. Empty state when no items match filters
+10. Browser Quick Add editable pre-save form
 
 == Changelog ==
 
+= 1.0.6 =
+* Added styled Gutenberg block live preview in the editor
+* Moved Browser Quick Add into the Add New sidebar
+* Removed wishlist image lazy loading to eliminate image flash
+* Updated install/package documentation to use .README
+
 = 1.0.5 =
-* Admin dashboard for wishlist item CRUD
+* Improved mobile filter layout and consistency
+* Removed tags functionality and legacy tags database column
+* Added Browser Quick Add bookmarklet with editable confirmation form
+* Fixed Add New admin routing issue
+* Improved mobile typography scaling in wishlist cards
+* Made wishlist card images clickable to open product links in a new tab
 * Frontend display via shortcode and Gutenberg block
-* AJAX-powered filtering by search, category, tags, price, and sort
+* AJAX-powered filtering by search, category, price, and sort
 * CSV and JSON export tools
 * Shortcode generator and custom CSS support
-* Responsive frontend card grid
 
 == Upgrade Notice ==
 
-= 1.0.5 =
+= 1.0.6 =
 Current stable release of Personal Wishlist Manager.
 
 == Privacy Policy ==

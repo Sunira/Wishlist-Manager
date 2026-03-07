@@ -3,7 +3,7 @@
  * Plugin Name: Personal Wishlist Manager
  * Plugin URI: https://example.com/personal-wishlist-manager
  * Description: A personal wishlist manager with admin dashboard and frontend display
- * Version: 1.0.5
+ * Version: 1.0.6
  * Author: Sunira
  * Author URI: https://example.com
  * License: GPLv2 or later
@@ -20,7 +20,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('PWM_VERSION', '1.0.5');
+define('PWM_VERSION', '1.0.6');
 define('PWM_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('PWM_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('PWM_PLUGIN_BASENAME', plugin_basename(__FILE__));
@@ -120,7 +120,7 @@ class Personal_Wishlist_Manager {
 			'pwm_default_columns' => 3,
 			'pwm_items_per_page' => 20,
 			'pwm_show_filters' => true,
-			'pwm_default_sort' => 'alphabetical',
+			'pwm_default_sort' => 'date_desc',
 			'pwm_currency_symbol' => '$',
 			'pwm_currency_position' => 'before',
 			'pwm_enable_ajax' => true,

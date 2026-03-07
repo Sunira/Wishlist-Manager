@@ -37,8 +37,8 @@
 				params.push('category="' + category + '"');
 			}
 
-			// Add sort if not default (alphabetical)
-			if (sort && sort !== 'alphabetical') {
+			// Add sort if not default (newest first)
+			if (sort && sort !== 'date_desc') {
 				params.push('sort="' + sort + '"');
 			}
 

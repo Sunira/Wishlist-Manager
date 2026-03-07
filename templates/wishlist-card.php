@@ -44,7 +44,7 @@ ob_start();
 		   target="_blank"
 		   rel="noopener noreferrer"
 		   title="<?php _e('View Product', 'personal-wishlist-manager'); ?>">
-			<img src="<?php echo esc_url($item->image_url); ?>" alt="<?php echo esc_attr($item->title); ?>" loading="lazy">
+			<img src="<?php echo esc_url($item->image_url); ?>" alt="<?php echo esc_attr($item->title); ?>" class="wishlist-card-photo">
 		</a>
 		<span class="wishlist-card-price"><?php echo pwm_format_price($item->price); ?></span>
 		<a href="<?php echo esc_url($item->product_url); ?>"

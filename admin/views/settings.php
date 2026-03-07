@@ -19,12 +19,6 @@ if (!current_user_can('manage_wishlist_items')) {
 $active_tab = isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : 'display';
 
 // Handle form submission
-if (isset($_POST['pwm_regenerate_quick_add_token'])) {
-	check_admin_referer('pwm_settings_nonce');
-	update_option('pwm_quick_add_token', wp_generate_password(40, false, false));
-	pwm_admin_notice(__('Quick Add token regenerated.', 'personal-wishlist-manager'), 'success');
-}
-
 if (isset($_POST['pwm_save_settings'])) {
 	check_admin_referer('pwm_settings_nonce');
 
@@ -45,14 +39,11 @@ if (isset($_POST['pwm_save_settings'])) {
 // Get current settings
 $default_columns = get_option('pwm_default_columns', 3);
 $items_per_page = get_option('pwm_items_per_page', 20);
-$default_sort = get_option('pwm_default_sort', 'alphabetical');
+$default_sort = get_option('pwm_default_sort', 'date_desc');
 $currency_symbol = get_option('pwm_currency_symbol', '$');
 $currency_position = get_option('pwm_currency_position', 'before');
 $custom_css = get_option('pwm_custom_css', '');
 $delete_on_uninstall = get_option('pwm_delete_on_uninstall', false);
-$quick_add_token = pwm_get_quick_add_token();
-$quick_add_endpoint = pwm_get_quick_add_endpoint_url();
-$quick_add_bookmarklet = pwm_get_quick_add_bookmarklet();
 
 $sort_options = pwm_get_sort_options();
 
@@ -190,7 +181,7 @@ $categories = $db->get_categories();
 								<option value="alphabetical"><?php _e('Alphabetical A-Z', 'personal-wishlist-manager'); ?></option>
 								<option value="price_asc"><?php _e('Price: Low to High', 'personal-wishlist-manager'); ?></option>
 								<option value="price_desc"><?php _e('Price: High to Low', 'personal-wishlist-manager'); ?></option>
-								<option value="date_desc"><?php _e('Date: Newest First', 'personal-wishlist-manager'); ?></option>
+								<option value="date_desc" selected><?php _e('Date: Newest First', 'personal-wishlist-manager'); ?></option>
 								<option value="date_asc"><?php _e('Date: Oldest First', 'personal-wishlist-manager'); ?></option>
 							</select>
 						</div>
@@ -281,7 +272,7 @@ $categories = $db->get_categories();
 							<td><code>sort</code></td>
 							<td><?php _e('Sort order', 'personal-wishlist-manager'); ?></td>
 							<td>alphabetical, price_asc, price_desc, date_desc, date_asc</td>
-							<td>alphabetical</td>
+							<td>date_desc</td>
 						</tr>
 						<tr>
 							<td><code>limit</code></td>
@@ -353,34 +344,6 @@ $categories = $db->get_categories();
 					<td>
 						<textarea name="pwm_custom_css" id="pwm_custom_css" rows="10" class="large-text code"><?php echo esc_textarea($custom_css); ?></textarea>
 						<p class="description"><?php _e('Add custom CSS to style your wishlist', 'personal-wishlist-manager'); ?></p>
-					</td>
-				</tr>
-
-				<tr>
-					<th scope="row">
-						<?php _e('Browser Quick Add', 'personal-wishlist-manager'); ?>
-					</th>
-					<td>
-						<p class="description"><?php _e('Use this bookmarklet to capture the current page into your wishlist from any website.', 'personal-wishlist-manager'); ?></p>
-						<p>
-							<label for="pwm_quick_add_endpoint"><strong><?php _e('Quick Add Endpoint', 'personal-wishlist-manager'); ?></strong></label><br>
-							<input type="text" id="pwm_quick_add_endpoint" value="<?php echo esc_attr($quick_add_endpoint); ?>" class="regular-text code" readonly>
-						</p>
-						<p>
-							<label for="pwm_quick_add_token"><strong><?php _e('Quick Add Token', 'personal-wishlist-manager'); ?></strong></label><br>
-							<input type="text" id="pwm_quick_add_token" value="<?php echo esc_attr($quick_add_token); ?>" class="regular-text code" readonly>
-						</p>
-						<p>
-							<label for="pwm_quick_add_bookmarklet"><strong><?php _e('Bookmarklet', 'personal-wishlist-manager'); ?></strong></label><br>
-							<textarea id="pwm_quick_add_bookmarklet" class="large-text code" rows="5" readonly><?php echo esc_textarea($quick_add_bookmarklet); ?></textarea>
-						</p>
-						<p class="description"><?php _e('Create a browser bookmark and paste the bookmarklet code as its URL. Clicking it on a product page opens a prefilled form where you can edit fields before saving.', 'personal-wishlist-manager'); ?></p>
-						<p>
-							<button type="submit" name="pwm_regenerate_quick_add_token" class="button">
-								<?php _e('Regenerate Quick Add Token', 'personal-wishlist-manager'); ?>
-							</button>
-						</p>
-						<p class="description" style="color: #d63638;"><?php _e('Regenerating the token invalidates previously saved bookmarklets.', 'personal-wishlist-manager'); ?></p>
 					</td>
 				</tr>
 

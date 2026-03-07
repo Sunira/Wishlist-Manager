@@ -53,14 +53,15 @@ class PWM_Shortcode {
 			'columns' => get_option('pwm_default_columns', 3),
 			'category' => '',
 			'categories' => array(),
-			'sort' => get_option('pwm_default_sort', 'alphabetical'),
+			'sort' => get_option('pwm_default_sort', 'date_desc'),
 			'limit' => -1,
 			'user_id' => 0,
 			'show_filters' => 'true',
 			'show_search' => 'true',
 			'show_category' => 'true',
 			'show_price' => 'true',
-			'show_sort' => 'true'
+			'show_sort' => 'true',
+			'preview_mode' => false
 		), $atts, 'personal_wishlist');
 
 		// Sanitize attributes
@@ -79,6 +80,7 @@ class PWM_Shortcode {
 		$show_category = filter_var($atts['show_category'], FILTER_VALIDATE_BOOLEAN);
 		$show_price = filter_var($atts['show_price'], FILTER_VALIDATE_BOOLEAN);
 		$show_sort = filter_var($atts['show_sort'], FILTER_VALIDATE_BOOLEAN);
+		$preview_mode = filter_var($atts['preview_mode'], FILTER_VALIDATE_BOOLEAN);
 
 		// Store filter visibility options for use in templates
 		$filter_options = array(
@@ -114,13 +116,18 @@ class PWM_Shortcode {
 			$query_args['limit'] = $limit;
 		}
 
+		// Keep block editor previews responsive by rendering a capped sample set.
+		if ($preview_mode && ($limit < 1 || $limit > 6)) {
+			$query_args['limit'] = 6;
+		}
+
 		// Apply filter to allow modification of query args
 		$query_args = apply_filters('pwm_query_args', $query_args);
 
 		// Get items
 		$db = PWM_Database::get_instance();
 		$items = $db->get_items($query_args);
-		$total_count = $db->get_items_count($query_args);
+		$total_count = $preview_mode ? count($items) : $db->get_items_count($query_args);
 
 		// Start output buffering
 		ob_start();
@@ -128,7 +135,7 @@ class PWM_Shortcode {
 		// Apply action before grid
 		do_action('pwm_before_grid', $items, $atts);
 
-		echo '<div class="personal-wishlist-container" data-columns="' . esc_attr($columns) . '">';
+		echo '<div class="personal-wishlist-container' . ($preview_mode ? ' pwm-editor-preview' : '') . '" data-columns="' . esc_attr($columns) . '">';
 
 		// Render filters (only if show_filters is true)
 		if ($show_filters) {

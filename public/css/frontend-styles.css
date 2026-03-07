@@ -354,19 +354,8 @@
 	line-height: 1.2;
 }
 
-.price-prefix {
-	position: absolute;
-	left: 12px;
-	top: calc(50% + 9px);
-	transform: translateY(-50%);
-	font-size: 14px;
-	font-weight: 600;
-	color: #6b7280;
-	pointer-events: none;
-}
-
 .price-input {
-	padding-left: 28px;
+	padding-left: 12px;
 	-moz-appearance: textfield;
 	appearance: textfield;
 }
@@ -911,10 +900,7 @@
 	.personal-wishlist-container .filter-group-price .price-input {
 		font-size: 18px !important;
 		font-weight: 600 !important;
-	}
-
-	.personal-wishlist-container .price-prefix {
-		font-size: 15px !important;
+		padding-left: 12px !important;
 	}
 
 	.filter-group-price .price-inputs {

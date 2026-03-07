@@ -15,6 +15,36 @@
 		var filterTimeout;
 		var currentSearchTerm = '';
 		var mobileFilterQuery = window.matchMedia('(max-width: 768px)');
+		var defaultSortValue = $('#pwm-sort-filter').val() || 'date_desc';
+		var priceInputSelector = '#pwm-min-price-filter, #pwm-max-price-filter';
+
+		function sanitizePriceString(value) {
+			if (typeof value !== 'string') {
+				return '';
+			}
+
+			var sanitized = value.replace(/[^0-9.]/g, '');
+			var firstDotIndex = sanitized.indexOf('.');
+			if (firstDotIndex !== -1) {
+				sanitized = sanitized.slice(0, firstDotIndex + 1) + sanitized.slice(firstDotIndex + 1).replace(/\./g, '');
+			}
+
+			return sanitized;
+		}
+
+		function normalizePriceInputValue(value) {
+			var sanitized = sanitizePriceString(value);
+			if (!sanitized) {
+				return '';
+			}
+
+			var numeric = parseFloat(sanitized);
+			if (isNaN(numeric) || numeric < 0) {
+				return '';
+			}
+
+			return (Math.round(numeric * 100) / 100).toString();
+		}
 
 		function debounce(func, wait) {
 			return function() {
@@ -32,7 +62,7 @@
 			var categoryValue = $('#pwm-category-filter').val();
 			var minPrice = $('#pwm-min-price-filter').val();
 			var maxPrice = $('#pwm-max-price-filter').val();
-			var sortValue = $('#pwm-sort-filter').val() || 'alphabetical';
+			var sortValue = $('#pwm-sort-filter').val() || defaultSortValue;
 			var columns = $('.personal-wishlist-container').data('columns') || 3;
 
 			currentSearchTerm = searchValue;
@@ -76,8 +106,6 @@
 						// Update active filters display
 						updateActiveFilters();
 
-						// Re-initialize lazy loading for new images
-						initLazyLoading();
 					}
 				},
 				complete: function() {
@@ -191,7 +219,7 @@
 			}
 
 			// Add sort filter if not default
-			if (sortValue && sortValue !== 'alphabetical') {
+			if (sortValue && sortValue !== defaultSortValue) {
 				var sortLabel = 'Sort: ';
 				switch(sortValue) {
 					case 'price_asc':
@@ -269,14 +297,6 @@
 			}
 		}
 
-		function initLazyLoading() {
-			if ('loading' in HTMLImageElement.prototype) {
-				$('#pwm-grid .wishlist-card-image img').each(function() {
-					$(this).attr('loading', 'lazy');
-				});
-			}
-		}
-
 		syncMobileFiltersState();
 
 		$(document).on('click', '#pwm-mobile-filter-toggle', function() {
@@ -290,7 +310,18 @@
 		// Filter event listeners
 		$('#pwm-search-filter').on('input', debounce(applyFilters, 300));
 		$('#pwm-category-filter').on('change', applyFilters);
-		$('#pwm-min-price-filter, #pwm-max-price-filter').on('input', debounce(applyFilters, 500));
+		$(document).on('input', priceInputSelector, function() {
+			var sanitized = sanitizePriceString($(this).val() || '');
+			if ($(this).val() !== sanitized) {
+				$(this).val(sanitized);
+			}
+		});
+
+		$(document).on('blur change', priceInputSelector, function() {
+			$(this).val(normalizePriceInputValue($(this).val() || ''));
+		});
+
+		$(priceInputSelector).on('input', debounce(applyFilters, 500));
 		$('#pwm-sort-filter').on('change', applyFilters);
 
 		// Clear all filters
@@ -299,7 +330,7 @@
 			$('#pwm-category-filter').val('');
 			$('#pwm-min-price-filter').val('');
 			$('#pwm-max-price-filter').val('');
-			$('#pwm-sort-filter').val('alphabetical');
+			$('#pwm-sort-filter').val(defaultSortValue);
 			currentSearchTerm = '';
 			applyFilters();
 		});
@@ -323,7 +354,7 @@
 					$('#pwm-max-price-filter').val('');
 					break;
 				case 'sort':
-					$('#pwm-sort-filter').val('alphabetical');
+					$('#pwm-sort-filter').val(defaultSortValue);
 					break;
 			}
 
@@ -339,39 +370,6 @@
 				return false;
 			}
 		});
-
-		/**
-		 * Lazy load images for better performance
-		 */
-		if ('loading' in HTMLImageElement.prototype) {
-			// Native lazy loading supported
-			$('.wishlist-card-image img').each(function() {
-				$(this).attr('loading', 'lazy');
-			});
-		} else if ('IntersectionObserver' in window) {
-			// Fallback to IntersectionObserver
-			var imageObserver = new IntersectionObserver(function(entries, observer) {
-				entries.forEach(function(entry) {
-					if (entry.isIntersecting) {
-						var img = entry.target;
-						if (img.dataset.src) {
-							img.src = img.dataset.src;
-							img.removeAttribute('data-src');
-							observer.unobserve(img);
-						}
-					}
-				});
-			});
-
-			$('.wishlist-card-image img').each(function() {
-				var currentSrc = $(this).attr('src');
-				if (currentSrc) {
-					$(this).attr('data-src', currentSrc);
-					$(this).attr('src', 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7');
-					imageObserver.observe(this);
-				}
-			});
-		}
 
 		/**
 		 * Keyboard navigation for cards

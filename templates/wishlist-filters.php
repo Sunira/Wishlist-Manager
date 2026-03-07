@@ -24,6 +24,7 @@ if (!isset($filter_options)) {
 $db = PWM_Database::get_instance();
 $categories = $db->get_categories();
 $price_range = $db->get_price_range();
+$default_sort = get_option('pwm_default_sort', 'date_desc');
 ?>
 
 <div class="wishlist-filters-wrapper">
@@ -88,14 +89,13 @@ $price_range = $db->get_price_range();
 								<label for="pwm-min-price-filter" class="price-input-label">
 									<?php _e('Min', 'personal-wishlist-manager'); ?>
 								</label>
-								<span class="price-prefix">$</span>
 								<input
-									type="number"
+									type="text"
+									inputmode="decimal"
 									id="pwm-min-price-filter"
 									class="filter-input price-input"
 								placeholder="0"
-								min="0"
-								step="0.01"
+								pattern="[0-9]*[.]?[0-9]*"
 								data-default-value="<?php echo esc_attr($price_range['min']); ?>"
 								value="<?php echo esc_attr($price_range['min']); ?>"
 							>
@@ -105,14 +105,13 @@ $price_range = $db->get_price_range();
 								<label for="pwm-max-price-filter" class="price-input-label">
 									<?php _e('Max', 'personal-wishlist-manager'); ?>
 								</label>
-								<span class="price-prefix">$</span>
 								<input
-									type="number"
+									type="text"
+									inputmode="decimal"
 									id="pwm-max-price-filter"
 								class="filter-input price-input"
 								placeholder="0"
-								min="0"
-								step="0.01"
+								pattern="[0-9]*[.]?[0-9]*"
 								data-default-value="<?php echo esc_attr($price_range['max']); ?>"
 								value="<?php echo esc_attr($price_range['max']); ?>"
 							>
@@ -128,11 +127,11 @@ $price_range = $db->get_price_range();
 					<?php _e('Sort By', 'personal-wishlist-manager'); ?>
 				</label>
 				<select id="pwm-sort-filter" class="filter-select">
-					<option value="alphabetical"><?php _e('Alphabetical A-Z', 'personal-wishlist-manager'); ?></option>
-					<option value="price_asc"><?php _e('Price: Low to High', 'personal-wishlist-manager'); ?></option>
-					<option value="price_desc"><?php _e('Price: High to Low', 'personal-wishlist-manager'); ?></option>
-					<option value="date_desc"><?php _e('Date: Newest First', 'personal-wishlist-manager'); ?></option>
-					<option value="date_asc"><?php _e('Date: Oldest First', 'personal-wishlist-manager'); ?></option>
+					<option value="alphabetical" <?php selected($default_sort, 'alphabetical'); ?>><?php _e('Alphabetical A-Z', 'personal-wishlist-manager'); ?></option>
+					<option value="price_asc" <?php selected($default_sort, 'price_asc'); ?>><?php _e('Price: Low to High', 'personal-wishlist-manager'); ?></option>
+					<option value="price_desc" <?php selected($default_sort, 'price_desc'); ?>><?php _e('Price: High to Low', 'personal-wishlist-manager'); ?></option>
+					<option value="date_desc" <?php selected($default_sort, 'date_desc'); ?>><?php _e('Date: Newest First', 'personal-wishlist-manager'); ?></option>
+					<option value="date_asc" <?php selected($default_sort, 'date_asc'); ?>><?php _e('Date: Oldest First', 'personal-wishlist-manager'); ?></option>
 				</select>
 			</div>
 		<?php endif; ?>

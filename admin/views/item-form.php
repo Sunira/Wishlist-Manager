@@ -30,6 +30,7 @@ $image_url = $item ? $item->image_url : '';
 $product_url = $item ? $item->product_url : '';
 $price = $item ? $item->price : '';
 $reason = $item ? $item->reason : '';
+$quick_add_bookmarklet = pwm_get_quick_add_bookmarklet();
 ?>
 
 <div class="wrap pwm-form-wrap">
@@ -225,6 +226,34 @@ $reason = $item ? $item->reason : '';
 						</ul>
 					</div>
 				</div>
+
+				<?php if (!$is_edit) : ?>
+					<div class="pwm-form-card pwm-quick-add-card">
+						<h2><span class="dashicons dashicons-admin-site"></span> <?php _e('Browser Quick Add', 'personal-wishlist-manager'); ?></h2>
+						<p class="pwm-quick-add-intro"><?php _e('Drag this button to your browser bookmarks bar to save products from any website.', 'personal-wishlist-manager'); ?></p>
+						<div class="pwm-quick-add-actions">
+							<a
+								href="<?php echo esc_attr($quick_add_bookmarklet); ?>"
+								class="pwm-button pwm-button-primary pwm-bookmarklet-btn"
+								draggable="true"
+							>
+								<span class="dashicons dashicons-book-alt"></span>
+								<?php _e('Quick Add to Wishlist', 'personal-wishlist-manager'); ?>
+							</a>
+							<button type="button" class="pwm-button pwm-button-secondary" id="pwm-copy-bookmarklet">
+								<span class="dashicons dashicons-clipboard"></span>
+								<?php _e('Copy Bookmarklet URL', 'personal-wishlist-manager'); ?>
+							</button>
+						</div>
+						<ol class="pwm-quick-add-steps">
+							<li><?php _e('Show your browser bookmarks bar.', 'personal-wishlist-manager'); ?></li>
+							<li><?php _e('Drag the Quick Add button to the bookmarks bar.', 'personal-wishlist-manager'); ?></li>
+							<li><?php _e('On any product page, click the bookmarklet.', 'personal-wishlist-manager'); ?></li>
+							<li><?php _e('Review/edit details, then save to your wishlist.', 'personal-wishlist-manager'); ?></li>
+						</ol>
+						<textarea id="pwm-bookmarklet-code" class="pwm-bookmarklet-code" readonly><?php echo esc_textarea($quick_add_bookmarklet); ?></textarea>
+					</div>
+				<?php endif; ?>
 			</div>
 		</div>
 	</form>
@@ -578,6 +607,54 @@ $reason = $item ? $item->reason : '';
 	line-height: 1.5;
 }
 
+.pwm-quick-add-card {
+	border-color: #b3d4f2;
+	background: linear-gradient(180deg, #f4f9ff 0%, #ffffff 100%);
+}
+
+.pwm-quick-add-intro {
+	margin: 0 0 14px;
+	font-size: 14px;
+	color: #2c3338;
+}
+
+.pwm-quick-add-actions {
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
+	margin-bottom: 14px;
+}
+
+.pwm-bookmarklet-btn {
+	cursor: grab;
+}
+
+.pwm-bookmarklet-btn:active {
+	cursor: grabbing;
+}
+
+.pwm-quick-add-steps {
+	margin: 0 0 12px 18px;
+	color: #50575e;
+}
+
+.pwm-quick-add-steps li {
+	margin-bottom: 6px;
+}
+
+.pwm-bookmarklet-code {
+	width: 100%;
+	min-height: 70px;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+	font-size: 12px;
+	padding: 10px;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	background: #f6f7f7;
+	color: #1d2327;
+	resize: vertical;
+}
+
 @media (max-width: 1200px) {
 	.pwm-form-container {
 		grid-template-columns: 1fr;
@@ -595,6 +672,10 @@ $reason = $item ? $item->reason : '';
 
 	.pwm-image-upload-wrapper {
 		flex-direction: column;
+	}
+
+	.pwm-quick-add-actions .pwm-button {
+		width: 100%;
 	}
 }
 </style>
@@ -697,6 +778,33 @@ jQuery(document).ready(function($) {
 			$('#image_id').val('');
 			updateImagePreview('');
 		}
+	});
+
+	$('#pwm-copy-bookmarklet').on('click', function() {
+		var $button = $(this);
+		var $code = $('#pwm-bookmarklet-code');
+
+		if (!$code.length) {
+			return;
+		}
+
+		var text = $code.val();
+		if (!text) {
+			return;
+		}
+
+		if (navigator.clipboard && navigator.clipboard.writeText) {
+			navigator.clipboard.writeText(text).then(function() {
+				$button.text('Copied');
+				setTimeout(function() {
+					$button.html('<span class="dashicons dashicons-clipboard"></span> Copy Bookmarklet URL');
+				}, 1500);
+			});
+			return;
+		}
+
+		$code.trigger('focus').trigger('select');
+		document.execCommand('copy');
 	});
 });
 </script>
