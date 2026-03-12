@@ -3,7 +3,7 @@ Contributors: sunira
 Tags: wishlist, products, shopping, catalog, gift list
 Requires at least: 6.0
 Tested up to: 6.4
-Stable tag: 1.0.6
+Stable tag: 1.0.7
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -136,6 +136,13 @@ No. The plugin only loads frontend assets on pages where the shortcode or block 
 
 == Changelog ==
 
+= 1.0.7 =
+* Refined wishlist filter UX so the controls themselves represent current filter state
+* Removed the separate active filter indicator row and added an inline conditional reset control
+* Improved wishlist browseability with stronger results hierarchy and cleaner card scan patterns
+* Added a more accurate Gutenberg block preview with frontend styling in the editor
+* Removed wishlist image lazy loading to eliminate flashing during browsing
+
 = 1.0.6 =
 * Added styled Gutenberg block live preview in the editor
 * Moved Browser Quick Add into the Add New sidebar
@@ -156,7 +163,7 @@ No. The plugin only loads frontend assets on pages where the shortcode or block 
 
 == Upgrade Notice ==
 
-= 1.0.6 =
+= 1.0.7 =
 Current stable release of Personal Wishlist Manager.
 
 == Privacy Policy ==

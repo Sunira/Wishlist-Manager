@@ -136,19 +136,17 @@ $default_sort = get_option('pwm_default_sort', 'date_desc');
 			</div>
 		<?php endif; ?>
 
+		<div class="filter-group filter-group-reset" id="pwm-inline-reset-wrap" style="display: none;">
+			<span class="filter-label filter-label-reset"><?php _e('Actions', 'personal-wishlist-manager'); ?></span>
+			<button type="button" class="filter-clear-btn pwm-clear-filters-trigger">
+				<?php _e('Reset', 'personal-wishlist-manager'); ?>
+			</button>
+		</div>
+
 		<div class="pwm-mobile-filter-actions">
 			<button type="button" id="pwm-mobile-filter-done" class="pwm-mobile-filter-done">
 				<?php _e('Done', 'personal-wishlist-manager'); ?>
 			</button>
 		</div>
-	</div>
-
-	<!-- Active Filters Display -->
-	<div class="active-filters" id="pwm-active-filters" style="display: none;">
-		<span class="active-filters-label"><?php _e('Active Filters:', 'personal-wishlist-manager'); ?></span>
-		<div class="active-filters-list" id="pwm-active-filters-list"></div>
-		<button type="button" id="pwm-clear-filters" class="filter-clear-btn">
-			<?php _e('Clear All', 'personal-wishlist-manager'); ?>
-		</button>
 	</div>
 </div>

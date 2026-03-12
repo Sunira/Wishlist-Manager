@@ -61,9 +61,10 @@ ob_start();
 
 	<div class="wishlist-card-content">
 		<div class="wishlist-card-header">
-			<h3 class="wishlist-card-title"><?php echo esc_html($item->title); ?></h3>
 			<span class="wishlist-card-category"><?php echo esc_html($item->category); ?></span>
+			<span class="wishlist-card-price-inline"><?php echo pwm_format_price($item->price); ?></span>
 		</div>
+		<h3 class="wishlist-card-title"><?php echo esc_html($item->title); ?></h3>
 
 		<?php if (!empty($item->reason)) : ?>
 			<div class="wishlist-card-reason">
@@ -71,6 +72,14 @@ ob_start();
 			</div>
 		<?php endif; ?>
 
+		<div class="wishlist-card-footer">
+			<a href="<?php echo esc_url($item->product_url); ?>"
+			   class="wishlist-card-link-text"
+			   target="_blank"
+			   rel="noopener noreferrer">
+				<?php _e('View item', 'personal-wishlist-manager'); ?>
+			</a>
+		</div>
 	</div>
 </div>
 

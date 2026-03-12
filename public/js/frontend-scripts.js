@@ -177,7 +177,6 @@
 		}
 
 		function updateActiveFilters() {
-			var filters = [];
 			var searchValue = $('#pwm-search-filter').val();
 			var categoryValue = $('#pwm-category-filter').val();
 			var minPrice = $('#pwm-min-price-filter').val();
@@ -185,81 +184,37 @@
 			var minPriceDefault = parseFloat($('#pwm-min-price-filter').data('default-value'));
 			var maxPriceDefault = parseFloat($('#pwm-max-price-filter').data('default-value'));
 			var sortValue = $('#pwm-sort-filter').val();
+			var activeFilterCount = 0;
 
 			if (searchValue) {
-				filters.push({
-					type: 'search',
-					label: 'Search: ' + searchValue
-				});
+				activeFilterCount += 1;
 			}
 
 			if (categoryValue) {
-				filters.push({
-					type: 'category',
-					label: 'Category: ' + categoryValue
-				});
+				activeFilterCount += 1;
 			}
 
 			var hasCustomMin = minPrice !== '' && !isNaN(parseFloat(minPrice)) && parseFloat(minPrice) !== minPriceDefault;
 			var hasCustomMax = maxPrice !== '' && !isNaN(parseFloat(maxPrice)) && parseFloat(maxPrice) !== maxPriceDefault;
 
 			if (hasCustomMin || hasCustomMax) {
-				var priceLabel = 'Price: ';
-				if (hasCustomMin && hasCustomMax) {
-					priceLabel += '$' + minPrice + ' - $' + maxPrice;
-				} else if (hasCustomMin) {
-					priceLabel += 'Min $' + minPrice;
-				} else {
-					priceLabel += 'Max $' + maxPrice;
-				}
-				filters.push({
-					type: 'price',
-					label: priceLabel
-				});
+				activeFilterCount += 1;
 			}
 
 			// Add sort filter if not default
 			if (sortValue && sortValue !== defaultSortValue) {
-				var sortLabel = 'Sort: ';
-				switch(sortValue) {
-					case 'price_asc':
-						sortLabel += 'Price: Low to High';
-						break;
-					case 'price_desc':
-						sortLabel += 'Price: High to Low';
-						break;
-					case 'date_desc':
-						sortLabel += 'Newest First';
-						break;
-					case 'date_asc':
-						sortLabel += 'Oldest First';
-						break;
-				}
-				filters.push({
-					type: 'sort',
-					label: sortLabel
-				});
+				activeFilterCount += 1;
 			}
 
-			var $activeFilters = $('#pwm-active-filters');
-			var $activeFiltersList = $('#pwm-active-filters-list');
+			var $inlineReset = $('#pwm-inline-reset-wrap');
 
-			if (filters.length > 0) {
-				$activeFiltersList.empty();
-				filters.forEach(function(filter) {
-					var badge = $('<span class="active-filter-badge" data-filter-type="' + filter.type + '"' +
-						(filter.value ? ' data-filter-value="' + filter.value + '"' : '') + '>' +
-						filter.label +
-						'<button type="button" class="remove-filter" aria-label="Remove filter">&times;</button>' +
-						'</span>');
-					$activeFiltersList.append(badge);
-				});
-				$activeFilters.show();
+			if (activeFilterCount > 0) {
+				$inlineReset.show();
 			} else {
-				$activeFilters.hide();
+				$inlineReset.hide();
 			}
 
-			updateMobileFilterCount(filters.length);
+			updateMobileFilterCount(activeFilterCount);
 		}
 
 		function updateMobileFilterCount(count) {
@@ -325,39 +280,13 @@
 		$('#pwm-sort-filter').on('change', applyFilters);
 
 		// Clear all filters
-		$(document).on('click', '#pwm-clear-filters, #pwm-clear-filters-empty', function() {
+		$(document).on('click', '.pwm-clear-filters-trigger, #pwm-clear-filters-empty', function() {
 			$('#pwm-search-filter').val('');
 			$('#pwm-category-filter').val('');
 			$('#pwm-min-price-filter').val('');
 			$('#pwm-max-price-filter').val('');
 			$('#pwm-sort-filter').val(defaultSortValue);
 			currentSearchTerm = '';
-			applyFilters();
-		});
-
-		// Remove individual filter
-		$(document).on('click', '.remove-filter', function(e) {
-			e.stopPropagation();
-			var $badge = $(this).closest('.active-filter-badge');
-			var filterType = $badge.data('filter-type');
-			var filterValue = $badge.data('filter-value');
-
-			switch(filterType) {
-				case 'search':
-					$('#pwm-search-filter').val('');
-					break;
-				case 'category':
-					$('#pwm-category-filter').val('');
-					break;
-				case 'price':
-					$('#pwm-min-price-filter').val('');
-					$('#pwm-max-price-filter').val('');
-					break;
-				case 'sort':
-					$('#pwm-sort-filter').val(defaultSortValue);
-					break;
-			}
-
 			applyFilters();
 		});
 
