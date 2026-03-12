@@ -1,179 +1,284 @@
-=== Personal Wishlist Manager ===
-Contributors: sunira
-Tags: wishlist, products, shopping, catalog, gift list
-Requires at least: 6.0
-Tested up to: 6.4
-Stable tag: 1.0.7
-Requires PHP: 7.4
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+# Personal Wishlist Manager
 
-A personal wishlist plugin with clean admin management, responsive frontend filters, shortcode/block support, and browser quick-add.
+A WordPress plugin for keeping a personal wishlist inside your own site, with a clean admin workflow, a browsable frontend grid, and a quick-add bookmarklet for saving items from around the web.
 
-== Description ==
+## Release Info
 
-Personal Wishlist Manager helps you run a single-user wishlist directly inside WordPress.
+- Current version: `1.0.7`
+- Requires WordPress: `6.0+`
+- Requires PHP: `7.4+`
+- License: `GPLv2 or later`
 
-Add and manage items in wp-admin, then display them on the frontend using either a shortcode or Gutenberg block.
+## What This Plugin Does
 
-= Features =
+Personal Wishlist Manager gives you a simple way to collect items you want, organize them, and publish them on a WordPress page.
 
-* Admin dashboard: list, add, edit, view, delete, and bulk delete items
-* Frontend grid: responsive card layout with 1-4 columns
-* Frontend filters: search, category, price range, and sort order
-* Shortcode and block support for easy embedding
-* Rich item details: title, image URL, product URL, price, category, and description/reason
-* AJAX filtering for faster updates without full page refresh
-* Browser Quick Add bookmarklet with editable pre-save form
-* Shortcode generator in Settings
-* CSV and JSON export
-* Custom CSS support
-* Selective asset loading on pages that use the wishlist output
-* Translation-ready strings
+You can:
 
-= Shortcode Usage =
+- add wishlist items manually from the WordPress admin
+- save items from other websites with the Browser Quick Add bookmarklet
+- organize items by category
+- store price, product link, image, and personal notes
+- show the wishlist on your site with a shortcode or Gutenberg block
+- let visitors browse with filters for search, category, price, and sort order
 
-Display your wishlist on any page or post using the `[personal_wishlist]` shortcode.
+## Best For
 
-**Basic usage:**
-`[personal_wishlist]`
+- personal wishlists
+- gift ideas
+- collecting products for later
+- visual inspiration boards
+- hobby or collection tracking
+- creators who want a public wishlist page on their own website
 
-**With custom parameters:**
-`[personal_wishlist columns="4" show_filters="true" sort="price_asc"]`
+## Quick Start
 
-**Filter by category:**
-`[personal_wishlist category="Electronics" columns="3"]`
+1. Install and activate the plugin.
+2. In WordPress admin, go to `Wishlist > Add New`.
+3. Add your first item with a title, category, price, image, and product URL.
+4. Create or edit a page where you want the wishlist to appear.
+5. Add either:
 
-= Available Shortcode Parameters =
+```text
+[personal_wishlist]
+```
 
-* `columns` - Number of columns (1-4, default: 3)
-* `category` - Filter to specific category
-* `categories` - Filter to multiple categories
-* `sort` - Sort order (alphabetical, price_asc, price_desc, date_desc, default: date_desc)
-* `limit` - Maximum items to display (default: unlimited)
-* `user_id` - Show specific user's wishlist (default: all items)
-* `show_filters` - Show/hide the entire filter panel (true/false, default: true)
-* `show_search` - Show/hide the search field (true/false, default: true)
-* `show_category` - Show/hide the category filter (true/false, default: true)
-* `show_price` - Show/hide the price range filter (true/false, default: true)
-* `show_sort` - Show/hide the sort dropdown (true/false, default: true)
+or the `Personal Wishlist` Gutenberg block.
 
-= Perfect For =
+## How To Use It
 
-* Personal shopping lists
-* Gift registries
-* Product collections
-* Wish lists
-* Shopping inspiration boards
-* Curated product collections
+### Add Items Manually
 
-== Installation ==
+Go to `Wishlist > Add New`.
 
-1. Upload the `personal-wishlist-manager` folder to the `/wp-content/plugins/` directory
-2. Activate the plugin through the 'Plugins' menu in WordPress
-3. Go to 'Wishlist' in the admin menu to add your first item
-4. Use the `[personal_wishlist]` shortcode on any page to display your wishlist
-5. Configure settings under 'Wishlist > Settings'
+For each item, you can enter:
 
-== Frequently Asked Questions ==
+- title
+- category
+- image URL
+- product URL
+- price
+- reason or notes
 
-= How do I display the wishlist on my site? =
+This is the best option when you want full control over the details before publishing.
 
-Use the shortcode `[personal_wishlist]` on any page or post. You can customize the display using shortcode parameters.
+### Use Browser Quick Add
 
-= Can I filter items by category? =
+On the `Add New Wishlist Item` screen, there is a `Browser Quick Add` panel in the right sidebar.
 
-Yes! You can use the `category` parameter in the shortcode, or enable the filter panel for visitors to filter items themselves.
+Use it like this:
 
-= Can I use a browser bookmarklet to add products quickly? =
+1. Drag the `Quick Add to Wishlist` button to your browser bookmarks bar.
+2. Visit a product page on another website.
+3. Click the bookmarklet.
+4. Review the captured item details.
+5. Edit anything you want before saving.
 
-Yes. Go to Wishlist > Settings > Advanced and copy the Browser Quick Add bookmarklet. It opens a prefilled form where you can edit fields before saving.
+Quick Add can capture:
 
-= Can I customize the appearance? =
+- page title
+- product URL
+- candidate product images
+- price when detectable
 
-Yes! The plugin includes built-in styling, but you can add custom CSS in the Settings page or through your theme's stylesheet.
+The quick-add flow saves the chosen image into your WordPress Media Library instead of hotlinking the source image.
 
-= Does it work with my theme? =
+## Displaying The Wishlist
 
-Yes. The plugin is designed to work with standard WordPress themes and includes its own frontend styling.
+### Option 1: Shortcode
 
-= Can I export my wishlist data? =
+Use the shortcode on any page or post:
 
-Yes. Go to Wishlist > Settings > Import/Export to export your data in CSV or JSON format.
+```text
+[personal_wishlist]
+```
 
-= Is it mobile-friendly? =
+### Option 2: Gutenberg Block
 
-Absolutely! The plugin is fully responsive and looks great on all devices.
+In the block editor:
 
-= Can multiple users have their own wishlists? =
+1. Add the `Personal Wishlist` block.
+2. Configure categories, sort order, columns, filters, and item limit in the block sidebar.
+3. Use the live preview in the editor to check the layout.
 
-The current version is designed for a single admin's wishlist. Multi-user support may be added in a future version.
+## Common Shortcode Examples
 
-= How do I add my first item? =
+### Default wishlist
 
-Go to Wishlist > Add New in your WordPress admin, fill in the item details, and click Publish.
+```text
+[personal_wishlist]
+```
 
-= Can I change the currency symbol? =
+### Four-column layout
 
-Yes! Go to Wishlist > Settings > Display to change the currency symbol and position.
+```text
+[personal_wishlist columns="4"]
+```
 
-= Does it slow down my site? =
+### Show only one category
 
-No. The plugin only loads frontend assets on pages where the shortcode or block is used.
+```text
+[personal_wishlist category="Books"]
+```
 
-== Screenshots ==
+### Limit the list
 
-1. Admin items list with search and bulk actions
-2. Add/Edit item form with media library integration
-3. Categories overview page
-4. Settings page with multiple tabs
-5. Frontend wishlist grid display
-6. Filter panel with category and price controls
-7. Responsive mobile view
-8. Individual wishlist card with details
-9. Empty state when no items match filters
-10. Browser Quick Add editable pre-save form
+```text
+[personal_wishlist limit="12"]
+```
 
-== Changelog ==
+### Hide filters
 
-= 1.0.7 =
-* Refined wishlist filter UX so the controls themselves represent current filter state
-* Removed the separate active filter indicator row and added an inline conditional reset control
-* Improved wishlist browseability with stronger results hierarchy and cleaner card scan patterns
-* Added a more accurate Gutenberg block preview with frontend styling in the editor
-* Removed wishlist image lazy loading to eliminate flashing during browsing
+```text
+[personal_wishlist show_filters="false"]
+```
 
-= 1.0.6 =
-* Added styled Gutenberg block live preview in the editor
-* Moved Browser Quick Add into the Add New sidebar
-* Removed wishlist image lazy loading to eliminate image flash
-* Updated install/package documentation to use .README
+## Shortcode Reference
 
-= 1.0.5 =
-* Improved mobile filter layout and consistency
-* Removed tags functionality and legacy tags database column
-* Added Browser Quick Add bookmarklet with editable confirmation form
-* Fixed Add New admin routing issue
-* Improved mobile typography scaling in wishlist cards
-* Made wishlist card images clickable to open product links in a new tab
-* Frontend display via shortcode and Gutenberg block
-* AJAX-powered filtering by search, category, price, and sort
-* CSV and JSON export tools
-* Shortcode generator and custom CSS support
+- `columns`: `1` to `4`
+- `category`: show one category
+- `categories`: show multiple categories
+- `sort`: `alphabetical`, `price_asc`, `price_desc`, `date_desc`, `date_asc`
+- `limit`: maximum number of items
+- `user_id`: target user ID
+- `show_filters`: `true` or `false`
+- `show_search`: `true` or `false`
+- `show_category`: `true` or `false`
+- `show_price`: `true` or `false`
+- `show_sort`: `true` or `false`
 
-== Upgrade Notice ==
+Default sort is `date_desc`, which means newest items first.
 
-= 1.0.7 =
-Current stable release of Personal Wishlist Manager.
+## Admin Areas
 
-== Privacy Policy ==
+### Wishlist
 
-Personal Wishlist Manager does not collect, store, or share any personal data. All wishlist data is stored locally in your WordPress database.
+The main admin list where you can:
 
-== Support ==
+- browse all items
+- search items
+- edit existing items
+- delete items
+- bulk delete items
 
-For support, feature requests, or bug reports, please visit the plugin support forum or contact the developer.
+### Add New
 
-== Credits ==
+The form for creating a wishlist item manually. This is also where the Browser Quick Add tools live.
 
-Developed with love for the WordPress community.
+### Categories
+
+Shows the categories currently used in your wishlist so you can understand how your list is grouped.
+
+### Settings
+
+Settings are split into sections for:
+
+- display options
+- shortcode generator
+- advanced settings
+- import/export tools
+
+## Display Features
+
+The frontend wishlist supports:
+
+- responsive grid layouts
+- search
+- category filtering
+- price range filtering
+- sorting
+- inline reset for filters when filters are active
+- mobile-friendly filter behavior
+
+## Data Stored For Each Item
+
+Each wishlist item can include:
+
+- title
+- category
+- image URL
+- product URL
+- price
+- notes or reason
+- created date
+- updated date
+
+## Import And Export
+
+You can export your wishlist from `Wishlist > Settings > Import/Export`.
+
+Available formats:
+
+- CSV
+- JSON
+
+This is useful for backups, migrations, and personal record keeping.
+
+## Appearance And Customization
+
+The plugin includes built-in frontend styling, but you can also customize it.
+
+Available options include:
+
+- default number of columns
+- default sort order
+- currency symbol
+- currency position
+- custom CSS
+
+## Recent Improvements In 1.0.7
+
+- refined the wishlist filter UX so the controls themselves represent current filter state
+- removed the separate active filter indicator row
+- added an inline reset control that appears only when filters are active
+- improved browsing clarity with a stronger results header and cleaner card hierarchy
+- improved Gutenberg block live preview styling in the editor
+- removed image lazy loading to avoid flashing while browsing
+
+## FAQ
+
+### Do I need to know code to use this plugin?
+
+No. You can manage items entirely from the WordPress admin and use either a shortcode or block to display the wishlist.
+
+### Can I use the block editor instead of a shortcode?
+
+Yes. The plugin supports both.
+
+### Can I save products from other websites?
+
+Yes. Use the Browser Quick Add bookmarklet from the `Add New` screen.
+
+### Can I customize the design?
+
+Yes. You can use the built-in settings and add custom CSS.
+
+### Is this meant for multiple users?
+
+Right now it is primarily structured as a personal wishlist manager for a single site owner/admin workflow.
+
+## File Structure
+
+- `personal-wishlist-manager.php`: main plugin bootstrap
+- `includes/`: core PHP logic
+- `admin/`: admin screens and scripts
+- `templates/`: frontend output templates
+- `public/`: frontend CSS, JS, and images
+- `blocks/`: Gutenberg block files
+
+## Privacy
+
+This plugin does not send wishlist data to an external service by default.
+
+Wishlist data is stored in your WordPress database.
+
+## Support Notes
+
+If you are testing changes locally, the main things to verify are:
+
+1. adding and editing wishlist items in wp-admin
+2. viewing the wishlist via shortcode or block
+3. filtering on desktop and mobile
+4. Browser Quick Add saving correctly
+5. block preview rendering correctly in the editor
+
